@@ -125,6 +125,8 @@ def plot_me(g):
         plt.plot(cd[i])
         plt.annotate("C{}:{}".format(i, g['vdiv'][i]), (0,cd[i][0]))
         plt.axhline(g['ypos'][i], 0, 4096, color='r')
+        yvB = - g['ypos'][i] * g['vdispres'][i]
+        yvT = (256 - g['ypos'][i]) * g['vdispres'][i]
     plt.grid(True)
     #plt.locator_params('both', tight=True)
     #plt.locator_params('y', nbins=8)
@@ -136,7 +138,8 @@ def plot_me(g):
         yT = VIRT_DATASPACE-1
         plt.ylim(0, VIRT_DATASPACE-1)
     plt.ylim(yB, yT)
-    plt.yticks(np.linspace(yB, yT, VIRT_DIVS+1))
+    labels = np.linspace(yvB, yvT, VIRT_DIVS+1)
+    plt.yticks(np.linspace(yB, yT, VIRT_DIVS+1), labels)
     plt.title(g['file'])
     plt.tight_layout()
     plt.show()
