@@ -53,13 +53,11 @@ def plot_me(g):
         cd[1,j] = da[i+1]
         cd[2,j] = da[i+2]
         cd[3,j] = da[i+3]
-    p = plt.subplots(4,1)
+    #p = plt.subplots(4,1)
     for i in range(4):
-        ax = p[1][i]
-        ax.plot(cd[i])
-        ax.set_title("Channel:{}".format(i))
-        ax.annotate(g['vdiv'][i], (128,3500))
-        ax.grid(True)
+        plt.plot(cd[i])
+        plt.annotate("C{}:{}".format(i, g['vdiv'][i]), (0,cd[i][0]))
+    plt.grid(True)
     plt.tight_layout()
     plt.show()
 
