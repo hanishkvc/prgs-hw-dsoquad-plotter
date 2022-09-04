@@ -22,6 +22,7 @@ g={}
 
 
 def process_args(g, args):
+    g['channels'] = "0123"
     iArg = 0
     while iArg < len(args)-1:
         iArg += 1
@@ -32,6 +33,9 @@ def process_args(g, args):
         elif cArg == "--format":
             iArg += 1
             g['format'] = args[iArg]
+        elif cArg == "--channels":
+            iArg += 1
+            g['channels'] = args[iArg]
 
 
 def parse_meta(g):
@@ -66,7 +70,9 @@ def plot_me(g):
         cd[2,j] = da[i+2]
         cd[3,j] = da[i+3]
     #p = plt.subplots(4,1)
-    for i in range(4):
+    for i in range(NUM_CHANNELS):
+        if not ("{}".format(i) in g['channels']):
+            continue
         plt.plot(cd[i])
         plt.annotate("C{}:{}".format(i, g['vdiv'][i]), (0,cd[i][0]))
     plt.grid(True)
