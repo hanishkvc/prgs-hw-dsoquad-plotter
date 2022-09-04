@@ -53,6 +53,8 @@ def plot_me(g):
         ax = p[1][i]
         ax.plot(cd[i])
         ax.set_title("Channel:{}".format(i))
+        ax.annotate(g['vdiv'][i], (128,3500))
+        ax.grid(True)
     plt.tight_layout()
     plt.show()
 
