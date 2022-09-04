@@ -86,7 +86,7 @@ def adj_ydata(yin):
     y = 256-yin
     y = y * YPOS_ADJ
     y = 256-y
-    y = y - yin*0.04
+    y = y - y*0.04
     return y
 
 
