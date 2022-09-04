@@ -9,6 +9,15 @@ import sys
 import array
 
 
+VIRT_DIVS = 8
+VIRT_DATASPACE = 256 # 8bits
+HORI_DIVS = 13
+HORI_DATASPACE = 512
+HIDDEN_SCREENS = 8
+HORI_TOTALSPACE = HORI_DATASPACE * HIDDEN_SCREENS
+NUM_CHANNELS = 4
+META_SIZE = 512
+
 g={}
 
 
@@ -31,9 +40,9 @@ def parse_meta(g):
     print("Channel Volts/Div:")
     g['vdiv'] = []
     g['vdispres'] = []
-    for i in range(0,16,4):
+    for i in range(0, 16, 4): # Total entries, Entries/Channel
         vd = meta[i+2]
-        vdr = vd*8/256 # 8 divisions on the screen, mapped to 8bit
+        vdr = vd*VIRT_DIVS/VIRT_DATASPACE # 8 divisions on the screen, mapped to 8bit
         print("\t{}:{}".format(len(g['vdiv']), vd))
         g['vdiv'].append(vd)
         g['vdispres'].append(vdr)
@@ -42,6 +51,9 @@ def parse_meta(g):
 def plot_me(g):
     f = open(g['file'], "rb")
     d = f.read()
+    if (len(d) != HORI_TOTALSPACE*NUM_CHANNELS+META_SIZE):
+        print("ERRR:PlotMe:FileSize doesnt match")
+        exit(1)
     da = array.array("B") # control whether to treat as signed or unsigned
     da.frombytes(d)
     g['meta'] = d[len(d)-512:]
@@ -58,6 +70,8 @@ def plot_me(g):
         plt.plot(cd[i])
         plt.annotate("C{}:{}".format(i, g['vdiv'][i]), (0,cd[i][0]))
     plt.grid(True)
+    plt.ylim(VIRT_DATASPACE-1)
+    plt.yticks(np.linspace(0, VIRT_DATASPACE-1, VIRT_DIVS+1))
     plt.tight_layout()
     plt.show()
 
