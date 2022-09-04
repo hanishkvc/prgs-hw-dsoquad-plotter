@@ -6,6 +6,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
+import array
 
 
 g={}
@@ -24,10 +25,19 @@ def process_args(g, args):
             g['format'] = args[iArg]
 
 
+def parse_meta(g):
+    meta = array.array('h')
+    meta.frombytes(g['meta'])
+    print("Channel Volts/Div:")
+    for i in range(0,16,4):
+        print("\t",meta[i+2])
+
+
 def plot_me(g):
     f = open(g['file'], "rb")
     d = f.read()
-    meta = d[len(d)-512:]
+    g['meta'] = d[len(d)-512:]
+    parse_meta(g)
     cd = np.zeros((4,4096))
     for i in range(0,4096*4,4):
         j = int(i/4)
