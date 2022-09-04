@@ -64,13 +64,16 @@ def parse_meta(g):
     print("Channel Volts/Div:")
     g['vdiv'] = []
     g['vdispres'] = []
+    g['ypos'] = []
     for i in range(0, 16, 4): # Total entries, Entries/Channel
         vd = meta[i+2]
         vdText, vdVal = parse_vdiv_index(vd)
         vdr = vdVal*VIRT_DIVS/VIRT_DATASPACE # 8 divisions on the screen, mapped to 8bit
-        print("\t{}:{}".format(len(g['vdiv']), vdText))
         g['vdiv'].append(vdVal)
         g['vdispres'].append(vdr)
+        ypos = meta[i+3]
+        g['ypos'].append(ypos)
+        print("\tC{}:{} v/div, {} ypos".format(len(g['vdiv']), vdText, ypos))
 
 
 def plot_me(g):
@@ -96,6 +99,7 @@ def plot_me(g):
             continue
         plt.plot(cd[i])
         plt.annotate("C{}:{}".format(i, g['vdiv'][i]), (0,cd[i][0]))
+        plt.axhline(g['ypos'][i], 0, 4096, color='r')
     plt.grid(True)
     #plt.locator_params('both', tight=True)
     #plt.locator_params('y', nbins=8)
