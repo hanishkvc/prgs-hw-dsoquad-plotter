@@ -97,8 +97,17 @@ def plot_me(g):
         plt.plot(cd[i])
         plt.annotate("C{}:{}".format(i, g['vdiv'][i]), (0,cd[i][0]))
     plt.grid(True)
-    plt.ylim(VIRT_DATASPACE-1)
-    plt.yticks(np.linspace(0, VIRT_DATASPACE-1, VIRT_DIVS+1))
+    #plt.locator_params('both', tight=True)
+    #plt.locator_params('y', nbins=8)
+    if g['dtype'] == 'b':
+        yB = -(VIRT_DATASPACE/2)
+        yT = (VIRT_DATASPACE/2)-1
+    else:
+        yB = 0
+        yT = VIRT_DATASPACE-1
+        plt.ylim(0, VIRT_DATASPACE-1)
+    plt.ylim(yB, yT)
+    plt.yticks(np.linspace(yB, yT, VIRT_DIVS+1))
     plt.tight_layout()
     plt.show()
 
