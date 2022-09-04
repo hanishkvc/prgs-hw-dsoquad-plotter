@@ -23,6 +23,7 @@ g={}
 
 def process_args(g, args):
     g['channels'] = "0123"
+    g['dtype'] = "b"
     iArg = 0
     while iArg < len(args)-1:
         iArg += 1
@@ -36,6 +37,9 @@ def process_args(g, args):
         elif cArg == "--channels":
             iArg += 1
             g['channels'] = args[iArg]
+        elif cArg == "--dtype":
+            iArg += 1
+            g['dtype'] = args[iArg]
 
 
 def parse_meta(g):
@@ -58,7 +62,7 @@ def plot_me(g):
     if (len(d) != HORI_TOTALSPACE*NUM_CHANNELS+META_SIZE):
         print("ERRR:PlotMe:FileSize doesnt match")
         exit(1)
-    da = array.array("B") # control whether to treat as signed or unsigned
+    da = array.array(g['dtype']) # control whether to treat as signed or unsigned
     da.frombytes(d)
     g['meta'] = d[len(d)-512:]
     parse_meta(g)
