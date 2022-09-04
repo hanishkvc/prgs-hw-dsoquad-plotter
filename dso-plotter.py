@@ -29,8 +29,11 @@ def parse_meta(g):
     meta = array.array('h')
     meta.frombytes(g['meta'])
     print("Channel Volts/Div:")
+    g['vdiv'] = []
     for i in range(0,16,4):
-        print("\t",meta[i+2])
+        vd = meta[i+2]
+        print("\t{}:{}".format(len(g['vdiv']), vd))
+        g['vdiv'].append(vd)
 
 
 def plot_me(g):
@@ -47,7 +50,10 @@ def plot_me(g):
         cd[3,j] = d[i+3]
     p = plt.subplots(4,1)
     for i in range(4):
-        p[1][i].plot(cd[i])
+        ax = p[1][i]
+        ax.plot(cd[i])
+        ax.set_title("Channel:{}".format(i))
+    plt.tight_layout()
     plt.show()
 
 
