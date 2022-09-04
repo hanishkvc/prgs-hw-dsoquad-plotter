@@ -42,6 +42,22 @@ def process_args(g, args):
             g['dtype'] = args[iArg]
 
 
+vdivRefBase=25e-6
+vdivList = [
+    [ "50mV", 2000],
+    [ "0.1V", 4000],
+    [ "0.2V", 8000],
+    [ "0.5V", 20000],
+    [ " 1V ", 40000],
+    [ " 2V ", 80000],
+    [ " 5V ", 200000],
+    [ "10V ", 400000]
+]
+
+def parse_vdiv_index(ind):
+    return vdivList[ind][0], vdivList[ind][1]*vdivRefBase
+
+
 def parse_meta(g):
     meta = array.array('h') # Need to check if all entries that is needed here correspond to 16bit signed values only or are there some unsigned 16bit values.
     meta.frombytes(g['meta'])
@@ -50,9 +66,10 @@ def parse_meta(g):
     g['vdispres'] = []
     for i in range(0, 16, 4): # Total entries, Entries/Channel
         vd = meta[i+2]
-        vdr = vd*VIRT_DIVS/VIRT_DATASPACE # 8 divisions on the screen, mapped to 8bit
-        print("\t{}:{}".format(len(g['vdiv']), vd))
-        g['vdiv'].append(vd)
+        vdText, vdVal = parse_vdiv_index(vd)
+        vdr = vdVal*VIRT_DIVS/VIRT_DATASPACE # 8 divisions on the screen, mapped to 8bit
+        print("\t{}:{}".format(len(g['vdiv']), vdText))
+        g['vdiv'].append(vdVal)
         g['vdispres'].append(vdr)
 
 
