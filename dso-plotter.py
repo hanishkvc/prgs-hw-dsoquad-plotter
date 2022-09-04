@@ -90,6 +90,17 @@ def adj_ydata(yin):
     return y
 
 
+def adj_ydata_c2(yin):
+    """
+    A very imperfect ydata adjustment for now.
+    Need to look at the underlying reasons and implications and then
+    update this to be more accurate.
+    """
+    y = yin*0.82
+    y = y + 14
+    return y
+
+
 def plot_me(g):
     f = open(g['file'], "rb")
     d = f.read()
