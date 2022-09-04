@@ -58,6 +58,7 @@ def parse_vdiv_index(ind):
     return vdivList[ind][0], vdivList[ind][1]*vdivRefBase
 
 
+YPOS_ADJ = 1.28
 def parse_meta(g):
     meta = array.array('h') # Need to check if all entries that is needed here correspond to 16bit signed values only or are there some unsigned 16bit values.
     meta.frombytes(g['meta'])
@@ -71,9 +72,9 @@ def parse_meta(g):
         vdr = vdVal*VIRT_DIVS/VIRT_DATASPACE # 8 divisions on the screen, mapped to 8bit
         g['vdiv'].append(vdVal)
         g['vdispres'].append(vdr)
-        ypos = meta[i+3]
+        ypos = meta[i+3]*YPOS_ADJ
         g['ypos'].append(ypos)
-        print("\tC{}:{} v/div, {} ypos".format(len(g['vdiv']), vdText, ypos))
+        print("\tC{}:{} v/div, {} ypos(adjusted)".format(len(g['vdiv']), vdText, ypos))
 
 
 def plot_me(g):
