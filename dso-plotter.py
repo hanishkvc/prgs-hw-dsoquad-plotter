@@ -108,6 +108,7 @@ def plot_me(g):
         plt.ylim(0, VIRT_DATASPACE-1)
     plt.ylim(yB, yT)
     plt.yticks(np.linspace(yB, yT, VIRT_DIVS+1))
+    plt.title(g['file'])
     plt.tight_layout()
     plt.show()
 
