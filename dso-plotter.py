@@ -77,6 +77,18 @@ def parse_meta(g):
         print("\tC{}:{} v/div, {} ypos(adjusted)".format(len(g['vdiv']), vdText, ypos))
 
 
+def adj_ydata(yin):
+    """
+    A very imperfect ydata adjustment for now.
+    Need to look at the underlying reasons and implications and then
+    update this to be more accurate.
+    """
+    y = 256-yin
+    y = y * YPOS_ADJ
+    y = 256-y
+    return y
+
+
 def plot_me(g):
     f = open(g['file'], "rb")
     d = f.read()
@@ -90,10 +102,10 @@ def plot_me(g):
     cd = np.zeros((4,4096))
     for i in range(0,4096*4,4):
         j = int(i/4)
-        cd[0,j] = da[i]
-        cd[1,j] = da[i+1]
-        cd[2,j] = da[i+2]
-        cd[3,j] = da[i+3]
+        cd[0,j] = adj_ydata(da[i])
+        cd[1,j] = adj_ydata(da[i+1])
+        cd[2,j] = adj_ydata(da[i+2])
+        cd[3,j] = adj_ydata(da[i+3])
     #p = plt.subplots(4,1)
     for i in range(NUM_CHANNELS):
         if not ("{}".format(i) in g['channels']):
