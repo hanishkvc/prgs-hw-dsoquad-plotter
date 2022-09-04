@@ -30,10 +30,13 @@ def parse_meta(g):
     meta.frombytes(g['meta'])
     print("Channel Volts/Div:")
     g['vdiv'] = []
+    g['vdispres'] = []
     for i in range(0,16,4):
         vd = meta[i+2]
+        vdr = vd*8/256 # 8 divisions on the screen, mapped to 8bit
         print("\t{}:{}".format(len(g['vdiv']), vd))
         g['vdiv'].append(vd)
+        g['vdispres'].append(vdr)
 
 
 def plot_me(g):
