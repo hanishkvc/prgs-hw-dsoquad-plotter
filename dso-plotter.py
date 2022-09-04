@@ -30,11 +30,12 @@ def plot_me(g):
     meta = d[len(d)-512:]
     cd = np.zeros((4,4096))
     for i in range(0,4096*4,4):
-        cd[0,i] = d[i]
-        cd[1,i] = d[i+1]
-        cd[2,i] = d[i+2]
-        cd[3,i] = d[i+3]
-    p = plt.subplots((4,1))
+        j = int(i/4)
+        cd[0,j] = d[i]
+        cd[1,j] = d[i+1]
+        cd[2,j] = d[i+2]
+        cd[3,j] = d[i+3]
+    p = plt.subplots(4,1)
     for i in range(4):
         p[1][i].plot(cd[i])
     plt.show()
