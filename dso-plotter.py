@@ -168,6 +168,7 @@ def plot_me(g):
     plt.ylim(yB, yT)
     labels = np.linspace(yvB, yvT, VIRT_DIVS+1)
     plt.yticks(np.linspace(yB, yT, VIRT_DIVS+1), labels)
+    plt.xticks(np.linspace(0, HORI_TOTALSPACE, 18*8))
     plt.title(g['file'])
     plt.tight_layout()
     plt.show()
