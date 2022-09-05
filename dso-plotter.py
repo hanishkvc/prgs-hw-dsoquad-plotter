@@ -58,6 +58,32 @@ def parse_vdiv_index(ind):
     return vdivList[ind][0], vdivList[ind][1]*vdivRefBase
 
 
+tdivRefBase = 3.3333e-6
+tdivList = [
+    [ "1S", 200-1, 1500-1 ],
+    [ "500mS", 100-1, 1500-1 ],
+    [ "200mS", 40-1, 1500-1 ],
+    [ "100mS", 40-1, 750-1 ],
+    [ "50mS", 40-1, 375-1 ],
+    [ "20mS", 16-1, 375-1 ],
+    [ "10mS", 8-1, 375-1 ],
+    [ "5mS", 4-1, 375-1 ],
+    [ "2mS", 4-1, 150-1 ],
+    [ "1mS", 2-1, 150-1 ],
+    [ "500uS", 1-1, 150-1 ],
+    [ "200uS", 1-1, 60-1 ],
+    [ "100uS", 1-1, 30-1 ],
+    [ "50uS", 1-1, 15-1 ],
+    [ "20uS", 1-1, 6-1 ],
+    [ "10uS", 1-1, 3-1 ],
+    [ "5uS", 1-1, 2-1 ]
+]
+
+def parse_tdiv_index(ind):
+    val = (tdivList[ind][1]+1)*(tdivList[ind][2]+1)*tdivRefBase
+    return tdivList[ind][0], val
+
+
 YPOS_ADJ = 1.28
 def parse_meta(g):
     meta = array.array('h') # Need to check if all entries that is needed here correspond to 16bit signed values only or are there some unsigned 16bit values.
@@ -75,6 +101,8 @@ def parse_meta(g):
         ypos = meta[i+3]*YPOS_ADJ
         g['ypos'].append(ypos)
         print("\tC{}:{} v/div, {} ypos(adjusted)".format(len(g['vdiv']), vdText, ypos))
+    g['timebase'] = parse_tdiv_index(meta[17])
+    print("\tt/div:{}".format(g['timebase']))
 
 
 def adj_ydata(yin):
