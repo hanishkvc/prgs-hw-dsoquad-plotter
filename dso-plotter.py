@@ -128,13 +128,13 @@ def parse_vdiv_index(ind):
 def friendly_time(fval):
     # fval = fval[0]
     if fval < 1e-6:
-        sval = "{}n".format(round(fval * 1e9))
+        sval = "{}n".format(round(fval * 1e9, 2))
     elif fval < 1e-3:
-        sval = "{}u".format(round(fval * 1e6))
+        sval = "{}u".format(round(fval * 1e6, 2))
     elif fval < 1:
-        sval = "{}m".format(round(fval * 1e3))
+        sval = "{}m".format(round(fval * 1e3, 2))
     else:
-        sval = "{}".format(round(fval))
+        sval = "{}".format(round(fval, 2))
     print(fval, sval)
     return sval
 
