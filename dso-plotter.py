@@ -3,6 +3,27 @@
 # HanishKVC, 2022
 #
 
+"""
+
+Buf format
+============
+
+doesnt contain raw adc samples, rather it only contains the values scaled
+and inturn offset for direct plotting on the device screen.
+
+So if you want maximum resolution/finer grained data then on DSO select
+
+* a vertical scale/range/sensitivity (ie V/div) which makes the
+  signal being monitored/captured occupy most of the screen vertical
+  space.
+
+* as always select a time base / horizontal sensitivity which captures the
+  signal sufficiently clearly spread over the horizontal screen space.
+
+
+"""
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
@@ -43,6 +64,9 @@ def process_args(g, args):
 
 
 vdivRefBase=25e-6
+#
+# Values picked from Sys::Bios.c::Y_Attr
+#
 vdivList = [
     [ "50mV", 2000],
     [ "0.1V", 4000],
@@ -59,6 +83,9 @@ def parse_vdiv_index(ind):
 
 
 tdivRefBase = 3.3333e-6
+#
+# Values picked from Sys::Bios.c::X_Attr and App::Process.c::TbaseOS
+#
 tdivList = [
     [ "1S", 200-1, 1500-1 ],
     [ "500mS", 100-1, 1500-1 ],
