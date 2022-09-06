@@ -5,6 +5,7 @@
 
 """
 
+
 Buf format
 ============
 
@@ -19,6 +20,18 @@ So if you want maximum resolution/finer grained data then on DSO select
 
 * as always select a time base / horizontal sensitivity which captures the
   signal sufficiently clearly spread over the horizontal screen space.
+
+
+Plot vertical
+==============
+
+The DSO seems to map the plot value vertically in a bit of a odd way.
+
+Rather initially as I had assumed buf files will contain raw adc samples,
+and then morphed the logic to assume that it is a raw mapping of the plot
+on screen, however I had forgotten about the actual screen resolution of
+the DSO. Not sure if that is what has lead to the strangeness I noticied,
+need to look into it yet.
 
 
 """
@@ -52,7 +65,7 @@ Usage:
 argsValid = [ "file", "format", "channels", "dtype" ]
 def process_args(g, args):
     g['channels'] = "0123"
-    g['dtype'] = "b"
+    g['dtype'] = "B"
     iArg = 0
     while iArg < len(args)-1:
         iArg += 1
