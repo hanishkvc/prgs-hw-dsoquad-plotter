@@ -62,14 +62,21 @@ g={}
 argsHelp = """
 Usage:
     --file <path/dso_saved_buf_file>
+      the saved buf file that should be plotted
     --format buf
     --channels <0|1|2|3|01|13|0123|...>
+      specify which channels should be displayed as part of the plot
     --dtype <b|B>
+      whether to treat the sample data as signed or unsigned(default)
+    --ytickschannel <0|1|2|3>
+      specify the channel that will be used for deciding the y ticks.
+      Defaults to the 1st channel in the specified list of channels.
 """
-argsValid = [ "file", "format", "channels", "dtype" ]
+argsValid = [ "file", "format", "channels", "dtype", "ytickschannel" ]
 def process_args(g, args):
     g['channels'] = "0123"
     g['dtype'] = "B"
+    g['ytickschannel'] = "?"
     iArg = 0
     while iArg < len(args)-1:
         iArg += 1
@@ -85,6 +92,8 @@ def process_args(g, args):
             iArg += 1
             cVal = args[iArg]
             g[cKey] = cVal
+    if g['ytickschannel'] == "?":
+        g['ytickschannel'] = g['channels'][0]
 
 
 vdivRefBase=25e-6
@@ -186,8 +195,9 @@ def plot_me(g):
         plt.plot(cd[i])
         plt.annotate("C{}:{}".format(i, g['vdiv'][i]), (0,cd[i][0]))
         plt.axhline(g['ypos'][i], 0, 4096, color='r')
-        yvB = - g['ypos'][i] * g['vdispres'][i]
-        yvT = (VIRT_DATASPACE - g['ypos'][i]) * g['vdispres'][i]
+        if i == int(g['ytickschannel']):
+            yvB = - g['ypos'][i] * g['vdispres'][i]
+            yvT = (VIRT_DATASPACE - g['ypos'][i]) * g['vdispres'][i]
     plt.grid(True)
     #plt.locator_params('both', tight=True)
     #plt.locator_params('y', nbins=8)
