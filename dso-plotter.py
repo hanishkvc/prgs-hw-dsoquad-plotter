@@ -5,10 +5,13 @@
 
 """
 
+DSOQuad DS203
+###############
+
 DSO Screen Res: 400x240
 
-Buf format files
-===================
+WildCat Buf format files
+===========================
 
 doesnt contain raw adc samples, rather it only contains the values scaled
 and inturn offset to help with direct plotting on the device screen, in a
@@ -147,7 +150,7 @@ def parse_tdiv_index(ind):
 def parse_meta(g):
     meta = array.array('h') # Need to check if all entries that is needed here correspond to 16bit signed values only or are there some unsigned 16bit values.
     meta.frombytes(g['meta'])
-    print("INFO:ParseMeta:Channel Volts/Div:")
+    print("INFO:ParseMeta: Channel Volts/Div:")
     g['vdiv'] = []
     g['vdispres'] = []
     g['ypos'] = []
@@ -161,7 +164,7 @@ def parse_meta(g):
         g['ypos'].append(ypos)
         print("\tC{}:{} v/div, {} ypos(adjusted)".format(len(g['vdiv']), vdText, ypos))
     g['timebase'] = parse_tdiv_index(meta[17])
-    print("INFO:ParseMeta:t/div:{}".format(g['timebase']))
+    print("INFO:ParseMeta: time/div:{}".format(g['timebase']))
 
 
 def adj_ydata(yin):
@@ -187,7 +190,7 @@ def plot_me(g):
         cd[1,j] = adj_ydata(da[i+1])
         cd[2,j] = adj_ydata(da[i+2])
         cd[3,j] = adj_ydata(da[i+3])
-    print("INFO:PlotMe:C0 Data Min,Max:", np.min(td), np.max(td))
+    print("INFO:PlotMe: C0 Data Min,Max:", np.min(td), np.max(td))
     #p = plt.subplots(4,1)
     for i in range(NUM_CHANNELS):
         if not ("{}".format(i) in g['channels']):
