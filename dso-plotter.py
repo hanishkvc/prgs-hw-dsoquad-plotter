@@ -125,6 +125,28 @@ def parse_vdiv_index(ind):
     return vdivList[ind][0], vdivList[ind][1]*vdivRefBase
 
 
+def friendly_time(fval):
+    # fval = fval[0]
+    if fval < 1e-6:
+        sval = "{}n".format(round(fval * 1e9))
+    elif fval < 1e-3:
+        sval = "{}u".format(round(fval * 1e6))
+    elif fval < 1:
+        sval = "{}m".format(round(fval * 1e3))
+    else:
+        sval = "{}".format(round(fval))
+    print(fval, sval)
+    return sval
+
+
+def friendly_times(fa):
+    #return np.apply_along_axis(friendly_time, 0, fa)
+    sa = []
+    for v in fa:
+        sa.append(friendly_time(v))
+    return sa
+
+
 tdivRefBase = 3.3333e-6
 #
 # Values picked from Sys::Bios.c::X_Attr and App::Process.c::TbaseOS
@@ -222,7 +244,8 @@ def plot_me(g):
     labels = np.linspace(yvB, yvT, VIRT_DIVS+1)
     plt.yticks(np.linspace(yB, yT, VIRT_DIVS+1), labels)
     xticks = np.arange(0, HORI_TOTALSPACE, HORI_TDIV_DATASAMPLES*10)
-    plt.xticks(xticks, xticks*g['tpixel'])
+    xlabels = friendly_times(xticks*g['tpixel'])
+    plt.xticks(xticks, xlabels)
     plt.title(g['file'])
     plt.tight_layout()
     plt.show()
