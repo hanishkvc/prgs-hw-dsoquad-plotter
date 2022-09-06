@@ -171,6 +171,7 @@ def parse_meta(g):
         g['ypos'].append(ypos)
         print("\tC{}:{} v/div, {} ypos(adjusted)".format(len(g['vdiv']), vdText, ypos))
     g['timebase'] = parse_tdiv_index(meta[17])
+    g['tpixel'] = g['timebase'][1]/HORI_TDIV_DATASAMPLES
     print("INFO:ParseMeta: time/div:{}".format(g['timebase']))
 
 
@@ -221,7 +222,7 @@ def plot_me(g):
     labels = np.linspace(yvB, yvT, VIRT_DIVS+1)
     plt.yticks(np.linspace(yB, yT, VIRT_DIVS+1), labels)
     xticks = np.arange(0, HORI_TOTALSPACE, HORI_TDIV_DATASAMPLES*10)
-    plt.xticks(xticks, xticks*g['timebase'][1])
+    plt.xticks(xticks, xticks*g['tpixel'])
     plt.title(g['file'])
     plt.tight_layout()
     plt.show()
