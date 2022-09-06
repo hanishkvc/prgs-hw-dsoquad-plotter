@@ -42,6 +42,14 @@ META_SIZE = 512
 g={}
 
 
+argsHelp = """
+Usage:
+    --file <path/dso_saved_buf_file>
+    --format buf
+    --channels <0|1|2|3|01|13|0123|...>
+    --dtype <b|B>
+"""
+argsValid = [ "file", "format", "channels", "dtype" ]
 def process_args(g, args):
     g['channels'] = "0123"
     g['dtype'] = "b"
@@ -49,18 +57,17 @@ def process_args(g, args):
     while iArg < len(args)-1:
         iArg += 1
         cArg = args[iArg]
-        if cArg == "--file":
+        if cArg.startswith("--"):
+            cKey = cArg[2:]
+            if not (cKey in argsValid):
+                if cKey == "help":
+                    print(argsHelp)
+                else:
+                    print("ERRR:ProcessArgs: Unknown argument ", cKey)
+                exit(1)
             iArg += 1
-            g['file'] = args[iArg]
-        elif cArg == "--format":
-            iArg += 1
-            g['format'] = args[iArg]
-        elif cArg == "--channels":
-            iArg += 1
-            g['channels'] = args[iArg]
-        elif cArg == "--dtype":
-            iArg += 1
-            g['dtype'] = args[iArg]
+            cVal = args[iArg]
+            g[cKey] = cVal
 
 
 vdivRefBase=25e-6
