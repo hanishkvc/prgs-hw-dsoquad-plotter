@@ -44,7 +44,7 @@ import array
 
 
 VIRT_DIVS = 8
-VIRT_DATASPACE = 256 # 8bits
+VIRT_DATASPACE = 200 # 240 vertical space divided into 8 units of data, ~0.5 unit of bottom menu space, 1 unit of top menu space
 HORI_DIVS = 13
 HORI_DATASPACE = 512
 HIDDEN_SCREENS = 8
@@ -142,7 +142,7 @@ def parse_meta(g):
     for i in range(0, 16, 4): # Total entries, Entries/Channel
         vd = meta[i+2]
         vdText, vdVal = parse_vdiv_index(vd)
-        vdr = vdVal*VIRT_DIVS/VIRT_DATASPACE # 8 divisions on the screen, mapped to 8bit
+        vdr = vdVal*VIRT_DIVS/VIRT_DATASPACE # 8 divisions on the screen, mapped to space set aside for plotting
         g['vdiv'].append(vdVal)
         g['vdispres'].append(vdr)
         ypos = meta[i+3]*YPOS_ADJ
@@ -153,6 +153,10 @@ def parse_meta(g):
 
 
 def adj_ydata(yin):
+    return yin-25
+
+
+def adj_ydata_c3(yin):
     """
     A very imperfect ydata adjustment for now.
     Need to look at the underlying reasons and implications and then
@@ -201,7 +205,7 @@ def plot_me(g):
         plt.annotate("C{}:{}".format(i, g['vdiv'][i]), (0,cd[i][0]))
         plt.axhline(g['ypos'][i], 0, 4096, color='r')
         yvB = - g['ypos'][i] * g['vdispres'][i]
-        yvT = (256 - g['ypos'][i]) * g['vdispres'][i]
+        yvT = (VIRT_DATASPACE - g['ypos'][i]) * g['vdispres'][i]
     plt.grid(True)
     #plt.locator_params('both', tight=True)
     #plt.locator_params('y', nbins=8)
