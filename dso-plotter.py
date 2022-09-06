@@ -153,7 +153,7 @@ def parse_meta(g):
 
 
 def adj_ydata(yin):
-    return yin-25
+    return yin-56
 
 
 def adj_ydata_c3(yin):
@@ -191,12 +191,15 @@ def plot_me(g):
     g['meta'] = d[len(d)-512:]
     parse_meta(g)
     cd = np.zeros((4,4096))
+    td = np.zeros(4096)
     for i in range(0,4096*4,4):
         j = int(i/4)
+        td[j] = da[i]
         cd[0,j] = adj_ydata(da[i])
         cd[1,j] = adj_ydata(da[i+1])
         cd[2,j] = adj_ydata(da[i+2])
         cd[3,j] = adj_ydata(da[i+3])
+    print("Data Min,Max:", np.min(td), np.max(td))
     #p = plt.subplots(4,1)
     for i in range(NUM_CHANNELS):
         if not ("{}".format(i) in g['channels']):
