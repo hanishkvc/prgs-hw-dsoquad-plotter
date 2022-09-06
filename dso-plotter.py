@@ -40,6 +40,12 @@ for plotting on the screen, but inturn offset by 56.
 Parallely the ypos wrt the channel(s) seems to be maintained without this
 56 offset.
 
+Plot horizontal
+================
+
+It appears like 30 data samples correspond to 1 time division. And the device
+screen shows 13 time divisions in its full screen (ie no params) mode.
+
 
 """
 
@@ -52,10 +58,11 @@ import array
 
 VIRT_DIVS = 8
 VIRT_DATASPACE = 200 # 240 vertical space divided into 8 units of data, ~0.5 unit of bottom menu space, 1 unit of top menu space
-HORI_DIVS = 13
 HORI_DATASPACE = 512
 HIDDEN_SCREENS = 8
 HORI_TOTALSPACE = HORI_DATASPACE * HIDDEN_SCREENS
+DSCR_HORI_TDIVS = 13
+HORI_TDIV_DATASAMPLES = 30
 NUM_CHANNELS = 4
 META_SIZE = 512
 
@@ -191,7 +198,7 @@ def plot_me(g):
         cd[2,j] = adj_ydata(da[i+2])
         cd[3,j] = adj_ydata(da[i+3])
     print("INFO:PlotMe: C0 Data Min,Max:", np.min(td), np.max(td))
-    #p = plt.subplots(4,1)
+    #fig, ax = plt.subplots()
     for i in range(NUM_CHANNELS):
         if not ("{}".format(i) in g['channels']):
             continue
@@ -213,7 +220,8 @@ def plot_me(g):
     plt.ylim(yB, yT)
     labels = np.linspace(yvB, yvT, VIRT_DIVS+1)
     plt.yticks(np.linspace(yB, yT, VIRT_DIVS+1), labels)
-    plt.xticks(np.linspace(0, HORI_TOTALSPACE, 18*8))
+    xticks = np.arange(0, HORI_TOTALSPACE, HORI_TDIV_DATASAMPLES*10)
+    plt.xticks(xticks, xticks*g['timebase'][1])
     plt.title(g['file'])
     plt.tight_layout()
     plt.show()
