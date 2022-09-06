@@ -52,6 +52,7 @@ screen shows 13 time divisions in its full screen (ie no params) mode.
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.ticker import (MultipleLocator, AutoMinorLocator)
 import sys
 import array
 
@@ -221,17 +222,17 @@ def plot_me(g):
         cd[2,j] = adj_ydata(da[i+2])
         cd[3,j] = adj_ydata(da[i+3])
     print("INFO:PlotMe: C0 Data Min,Max:", np.min(td), np.max(td))
-    #fig, ax = plt.subplots()
+    fig, ax = plt.subplots()
     for i in range(NUM_CHANNELS):
         if not ("{}".format(i) in g['channels']):
             continue
-        plt.plot(cd[i])
-        plt.annotate("C{}:{}".format(i, g['vdiv'][i]), (0,cd[i][0]))
-        plt.axhline(g['ypos'][i], 0, 4096, color='r')
+        ax.plot(cd[i])
+        ax.annotate("C{}:{}".format(i, g['vdiv'][i]), (0,cd[i][0]))
+        ax.axhline(g['ypos'][i], 0, 4096, color='r')
         if i == int(g['ytickschannel']):
             yvB = - g['ypos'][i] * g['vpixel'][i]
             yvT = (VIRT_DATASPACE - g['ypos'][i]) * g['vpixel'][i]
-    plt.grid(True)
+    ax.grid(True)
     #plt.locator_params('both', tight=True)
     #plt.locator_params('y', nbins=8)
     if g['dtype'] == 'b':
@@ -240,12 +241,13 @@ def plot_me(g):
     else:
         yB = 0
         yT = VIRT_DATASPACE-1
-    plt.ylim(yB, yT)
+    ax.set_ylim(yB, yT)
     labels = np.linspace(yvB, yvT, VIRT_DIVS+1)
-    plt.yticks(np.linspace(yB, yT, VIRT_DIVS+1), labels)
+    ax.set_yticks(np.linspace(yB, yT, VIRT_DIVS+1), labels)
     xticks = np.arange(0, HORI_TOTALSPACE, HORI_TDIV_DATASAMPLES*10)
     xlabels = friendly_times(xticks*g['tpixel'])
-    plt.xticks(xticks, xlabels)
+    ax.set_xticks(xticks, xlabels)
+    ax.xaxis.set_minor_locator(MultipleLocator(3))
     plt.title(g['file'])
     plt.tight_layout()
     plt.show()
