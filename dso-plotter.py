@@ -159,14 +159,14 @@ def parse_meta(g):
     meta.frombytes(g['meta'])
     print("INFO:ParseMeta: Channel Volts/Div:")
     g['vdiv'] = []
-    g['vdispres'] = []
+    g['vpixel'] = []
     g['ypos'] = []
     for i in range(0, 16, 4): # Total entries, Entries/Channel
         vd = meta[i+2]
         vdText, vdVal = parse_vdiv_index(vd)
-        vdr = vdVal*VIRT_DIVS/VIRT_DATASPACE # 8 divisions on the screen, mapped to space set aside for plotting
+        vpixel = vdVal*VIRT_DIVS/VIRT_DATASPACE # 8 divisions on the screen, mapped to space set aside for plotting
         g['vdiv'].append(vdVal)
-        g['vdispres'].append(vdr)
+        g['vpixel'].append(vpixel)
         ypos = meta[i+3]
         g['ypos'].append(ypos)
         print("\tC{}:{} v/div, {} ypos(adjusted)".format(len(g['vdiv']), vdText, ypos))
@@ -206,8 +206,8 @@ def plot_me(g):
         plt.annotate("C{}:{}".format(i, g['vdiv'][i]), (0,cd[i][0]))
         plt.axhline(g['ypos'][i], 0, 4096, color='r')
         if i == int(g['ytickschannel']):
-            yvB = - g['ypos'][i] * g['vdispres'][i]
-            yvT = (VIRT_DATASPACE - g['ypos'][i]) * g['vdispres'][i]
+            yvB = - g['ypos'][i] * g['vpixel'][i]
+            yvT = (VIRT_DATASPACE - g['ypos'][i]) * g['vpixel'][i]
     plt.grid(True)
     #plt.locator_params('both', tight=True)
     #plt.locator_params('y', nbins=8)
