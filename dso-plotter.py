@@ -145,7 +145,7 @@ def parse_meta(g):
         vdr = vdVal*VIRT_DIVS/VIRT_DATASPACE # 8 divisions on the screen, mapped to space set aside for plotting
         g['vdiv'].append(vdVal)
         g['vdispres'].append(vdr)
-        ypos = meta[i+3]*YPOS_ADJ
+        ypos = meta[i+3]
         g['ypos'].append(ypos)
         print("\tC{}:{} v/div, {} ypos(adjusted)".format(len(g['vdiv']), vdText, ypos))
     g['timebase'] = parse_tdiv_index(meta[17])
@@ -218,7 +218,6 @@ def plot_me(g):
     else:
         yB = 0
         yT = VIRT_DATASPACE-1
-        plt.ylim(0, VIRT_DATASPACE-1)
     plt.ylim(yB, yT)
     labels = np.linspace(yvB, yvT, VIRT_DIVS+1)
     plt.yticks(np.linspace(yB, yT, VIRT_DIVS+1), labels)
