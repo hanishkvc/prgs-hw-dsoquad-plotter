@@ -5,12 +5,14 @@
 
 """
 
+DSO Screen Res: 400x240
 
-Buf format
-============
+Buf format files
+===================
 
 doesnt contain raw adc samples, rather it only contains the values scaled
-and inturn offset for direct plotting on the device screen.
+and inturn offset to help with direct plotting on the device screen, in a
+easy/relatively straight forward manner.
 
 So if you want maximum resolution/finer grained data then on DSO select
 
@@ -25,13 +27,15 @@ So if you want maximum resolution/finer grained data then on DSO select
 Plot vertical
 ==============
 
-The DSO seems to map the plot value vertically in a bit of a odd way.
+It appears like around 200 pixels out of 240 pixels of device screen, is
+used for plotting of the captured signals.
 
-Rather initially as I had assumed buf files will contain raw adc samples,
-and then morphed the logic to assume that it is a raw mapping of the plot
-on screen, however I had forgotten about the actual screen resolution of
-the DSO. Not sure if that is what has lead to the strangeness I noticied,
-need to look into it yet.
+Inturn the signal data seems to be maintained as values in the range 0-199,
+inturn mapping one-to-one to how it will appear on the 200 pixels set aside
+for plotting on the screen, but inturn offset by 56.
+
+Parallely the ypos wrt the channel(s) seems to be maintained without this
+56 offset.
 
 
 """
@@ -131,7 +135,6 @@ def parse_tdiv_index(ind):
     return tdivList[ind][0], val
 
 
-YPOS_ADJ = 1.28
 def parse_meta(g):
     meta = array.array('h') # Need to check if all entries that is needed here correspond to 16bit signed values only or are there some unsigned 16bit values.
     meta.frombytes(g['meta'])
@@ -154,30 +157,6 @@ def parse_meta(g):
 
 def adj_ydata(yin):
     return yin-56
-
-
-def adj_ydata_c3(yin):
-    """
-    A very imperfect ydata adjustment for now.
-    Need to look at the underlying reasons and implications and then
-    update this to be more accurate.
-    """
-    y = 256-yin
-    y = y * YPOS_ADJ
-    y = 256-y
-    y = y - y*0.04
-    return y
-
-
-def adj_ydata_c2(yin):
-    """
-    A very imperfect ydata adjustment for now.
-    Need to look at the underlying reasons and implications and then
-    update this to be more accurate.
-    """
-    y = yin*0.82
-    y = y + 14
-    return y
 
 
 def plot_me(g):
