@@ -208,6 +208,8 @@ def show_location(ev):
     xval = ev.xdata * g['tpixel']
     yval = g['yvB'] + (ev.ydata * g['yvPixel'])
     print(ev, xval, yval)
+    g['xytext'].set_text("{},{}".format(xval, yval))
+    g['fig'].canvas.draw()
 
 
 def plot_buffile(g):
@@ -263,6 +265,7 @@ def plot_buffile(g):
     xlabels = friendly_times(xticks*g['tpixel'])
     ax.set_xticks(xticks, xlabels)
     ax.xaxis.set_minor_locator(MultipleLocator(30))
+    g['xytext'] = ax.text(0, 0.98, "", transform=ax.transAxes)
     plt.title(g['file'])
     plt.tight_layout()
     plt.show()
