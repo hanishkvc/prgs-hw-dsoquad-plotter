@@ -205,7 +205,9 @@ def adj_ydata(yin):
 
 
 def show_location(ev):
-    print(ev)
+    xval = ev.xdata * g['tpixel']
+    yval = g['yvB'] + (ev.ydata * g['yvPixel'])
+    print(ev, xval, yval)
 
 
 def plot_buffile(g):
@@ -230,6 +232,8 @@ def plot_buffile(g):
         cd[3,j] = adj_ydata(da[i+3])
     print("INFO:PlotBufFile:C{} Data: Raw[{} to {}] Adjusted[{} to {}]".format(yc, np.min(rd), np.max(rd), np.min(cd[yc]), np.max(cd[yc])))
     fig, ax = plt.subplots()
+    g['fig'] = fig
+    g['ax'] = ax
     fig.canvas.mpl_connect('button_press_event', show_location)
     for i in range(NUM_CHANNELS):
         if not ("{}".format(i) in g['channels']):
@@ -252,6 +256,9 @@ def plot_buffile(g):
     ax.set_ylim(yB, yT)
     labels = np.linspace(yvB, yvT, VIRT_DIVS+1)
     ax.set_yticks(np.linspace(yB, yT, VIRT_DIVS+1), labels)
+    g['yvB'] = yvB
+    g['yvT'] = yvT
+    g['yvPixel'] = (yvT-yvB)/VIRT_DATASPACE
     xticks = np.arange(0, HORI_TOTALSPACE, HORI_TDIV_DATASAMPLES*10)
     xlabels = friendly_times(xticks*g['tpixel'])
     ax.set_xticks(xticks, xlabels)
