@@ -208,9 +208,9 @@ def show_location(ev):
     xval = ev.xdata * g['tpixel']
     yval = g['yvB'] + (ev.ydata * g['yvPixel'])
     print(ev, xval, yval)
-    g['prevXYText'].set_text(": Prev:{},{}".format(g['prevXVal'], g['prevYVal']))
-    g['curXYText'].set_text(":  Cur:{},{}".format(xval, yval))
-    g['deltaXYText'].set_text(":Delta:{},{}".format(xval-g['prevXVal'], yval-g['prevYVal']))
+    g['prevXYText'].set_text(" Prev: {}, {}".format(g['prevXVal'], g['prevYVal']))
+    g['curXYText'].set_text("  Cur: {}, {}".format(xval, yval))
+    g['deltaXYText'].set_text("Delta: {}, {}".format(xval-g['prevXVal'], yval-g['prevYVal']))
     g['prevXVal'] = xval
     g['prevYVal'] = yval
     g['fig'].canvas.draw()
@@ -269,9 +269,9 @@ def plot_buffile(g):
     xlabels = friendly_times(xticks*g['tpixel'])
     ax.set_xticks(xticks, xlabels)
     ax.xaxis.set_minor_locator(MultipleLocator(30))
-    g['prevXYText'] = ax.text(0, 0.95, "", transform=ax.transAxes)
-    g['curXYText'] = ax.text(0, 0.90, "", transform=ax.transAxes)
-    g['deltaXYText'] = ax.text(0, 0.85, "", transform=ax.transAxes)
+    g['prevXYText'] = ax.text(0, 0.95, "", transform=ax.transAxes, fontfamily="monospace")
+    g['curXYText'] = ax.text(0, 0.90, "", transform=ax.transAxes, fontfamily="monospace")
+    g['deltaXYText'] = ax.text(0, 0.85, "", transform=ax.transAxes, fontfamily="monospace")
     g['prevXVal'] = 0
     g['prevYVal'] = 0
     plt.title(g['file'])
