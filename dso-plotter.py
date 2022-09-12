@@ -64,8 +64,9 @@ HIDDEN_SCREENS = 8
 HORI_TOTALSPACE = HORI_DATASPACE * HIDDEN_SCREENS
 DSCR_HORI_TDIVS = 13
 HORI_TDIV_DATASAMPLES = 30
+
 NUM_CHANNELS = 4
-META_SIZE = 512
+BUFFILE_META_SIZE = 512
 
 g={}
 
@@ -202,15 +203,15 @@ def adj_ydata(yin):
     return yin-56
 
 
-def plot_me(g):
+def plot_buffile(g):
     f = open(g['file'], "rb")
     d = f.read()
-    if (len(d) != HORI_TOTALSPACE*NUM_CHANNELS+META_SIZE):
+    if (len(d) != HORI_TOTALSPACE*NUM_CHANNELS+BUFFILE_META_SIZE):
         print("ERRR:PlotMe:FileSize doesnt match")
         exit(1)
     da = array.array(g['dtype']) # control whether to treat as signed or unsigned
     da.frombytes(d)
-    g['meta'] = d[len(d)-512:]
+    g['meta'] = d[len(d)-BUFFILE_META_SIZE:]
     parse_meta(g)
     cd = np.zeros((4,4096))
     td = np.zeros(4096)
@@ -255,4 +256,4 @@ def plot_me(g):
 
 process_args(g, sys.argv)
 print(g)
-plot_me(g)
+plot_buffile(g)
