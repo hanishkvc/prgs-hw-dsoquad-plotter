@@ -204,6 +204,10 @@ def adj_ydata(yin):
     return yin-56
 
 
+def show_location(ev):
+    print(ev)
+
+
 def plot_buffile(g):
     f = open(g['file'], "rb")
     d = f.read()
@@ -226,6 +230,7 @@ def plot_buffile(g):
         cd[3,j] = adj_ydata(da[i+3])
     print("INFO:PlotBufFile:C{} Data: Raw[{} to {}] Adjusted[{} to {}]".format(yc, np.min(rd), np.max(rd), np.min(cd[yc]), np.max(cd[yc])))
     fig, ax = plt.subplots()
+    fig.canvas.mpl_connect('button_press_event', show_location)
     for i in range(NUM_CHANNELS):
         if not ("{}".format(i) in g['channels']):
             continue
