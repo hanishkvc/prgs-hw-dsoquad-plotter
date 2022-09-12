@@ -106,6 +106,7 @@ def process_args(g, args):
             g[cKey] = cVal
     if g['ytickschannel'] == "?":
         g['ytickschannel'] = g['channels'][0]
+    g['ytickschannel'] = int(g['ytickschannel'])
 
 
 vdivRefBase=25e-6
@@ -207,22 +208,23 @@ def plot_buffile(g):
     f = open(g['file'], "rb")
     d = f.read()
     if (len(d) != HORI_TOTALSPACE*NUM_CHANNELS+BUFFILE_META_SIZE):
-        print("ERRR:PlotMe:FileSize doesnt match")
+        print("ERRR:PlotBufFile:FileSize doesnt match")
         exit(1)
     da = array.array(g['dtype']) # control whether to treat as signed or unsigned
     da.frombytes(d)
     g['meta'] = d[len(d)-BUFFILE_META_SIZE:]
     parse_meta(g)
     cd = np.zeros((4,4096))
-    td = np.zeros(4096)
+    rd = np.zeros(4096)
+    yc = g['ytickschannel']
     for i in range(0,4096*4,4):
         j = int(i/4)
-        td[j] = da[i]
+        rd[j] = da[i+yc]
         cd[0,j] = adj_ydata(da[i])
         cd[1,j] = adj_ydata(da[i+1])
         cd[2,j] = adj_ydata(da[i+2])
         cd[3,j] = adj_ydata(da[i+3])
-    print("INFO:PlotMe: C0 Data Min,Max:", np.min(td), np.max(td))
+    print("INFO:PlotBufFile:C{} Data: Raw[{} to {}] Adjusted[{} to {}]".format(yc, np.min(rd), np.max(rd), np.min(cd[yc]), np.max(cd[yc])))
     fig, ax = plt.subplots()
     for i in range(NUM_CHANNELS):
         if not ("{}".format(i) in g['channels']):
@@ -230,7 +232,7 @@ def plot_buffile(g):
         ax.plot(cd[i])
         ax.annotate("C{}:{}".format(i, g['vdiv'][i]), (0,cd[i][0]))
         ax.axhline(g['ypos'][i], 0, 4096, color='r')
-        if i == int(g['ytickschannel']):
+        if i == yc:
             yvB = - g['ypos'][i] * g['vpixel'][i]
             yvT = (VIRT_DATASPACE - g['ypos'][i]) * g['vpixel'][i]
     ax.grid(True)
