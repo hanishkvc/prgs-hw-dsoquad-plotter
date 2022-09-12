@@ -250,7 +250,7 @@ def plot_buffile(g):
     xticks = np.arange(0, HORI_TOTALSPACE, HORI_TDIV_DATASAMPLES*10)
     xlabels = friendly_times(xticks*g['tpixel'])
     ax.set_xticks(xticks, xlabels)
-    ax.xaxis.set_minor_locator(MultipleLocator(3))
+    ax.xaxis.set_minor_locator(MultipleLocator(30))
     plt.title(g['file'])
     plt.tight_layout()
     plt.show()
