@@ -314,11 +314,11 @@ def plot_buffile(g):
     da.frombytes(d)
     g['meta'] = d[len(d)-BUFFILE_META_SIZE:]
     parse_meta(g)
-    cd = np.zeros((4,4096))
-    rd = np.zeros(4096)
+    cd = np.zeros((NUM_CHANNELS, HORI_ALLWINDOWS_SPACE))
+    rd = np.zeros(HORI_ALLWINDOWS_SPACE)
     yc = g['ytickschannel']
-    for i in range(0,4096*4,4):
-        j = int(i/4)
+    for i in range(0, HORI_ALLWINDOWS_SPACE*NUM_CHANNELS, NUM_CHANNELS):
+        j = int(i/NUM_CHANNELS)
         rd[j] = da[i+yc]
         cd[0,j] = adj_ydata(da[i])
         cd[1,j] = adj_ydata(da[i+1])
@@ -369,7 +369,7 @@ def plot_buffile(g):
     xticks = np.arange(0, HORI_ALLWINDOWS_SPACE, HORI_TDIV_DATASAMPLES*10)
     xlabels = friendly_times(xticks*g['tpixel'])
     ax.set_xticks(xticks, xlabels)
-    ax.xaxis.set_minor_locator(MultipleLocator(30))
+    ax.xaxis.set_minor_locator(MultipleLocator(HORI_TDIV_DATASAMPLES))
     g['prevXYText'] = ax.text(0, 0.95, "", transform=ax.transAxes, fontfamily="monospace")
     g['curXYText'] = ax.text(0, 0.90, "", transform=ax.transAxes, fontfamily="monospace")
     g['deltaXYText'] = ax.text(0, 0.85, "", transform=ax.transAxes, fontfamily="monospace")
