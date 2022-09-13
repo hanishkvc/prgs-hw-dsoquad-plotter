@@ -341,9 +341,9 @@ def plot_datfile(g):
     for i in range(NUM_CHANNELS):
         if not ("{}".format(i) in g['channels']):
             continue
-        ax.plot(cd[i])
+        lines = ax.plot(cd[i])
         ax.annotate("C{}".format(i), (0,cd[i][0]))
-        ax.axhline(g['ypos'][i], color='r')
+        ax.axhline(g['ypos'][i], color=lines[0].get_color(), alpha=0.5)
         fd = filter_data(cd[i], g['filterdata'])
         if g['filterdata'] != "":
             ax.plot(fd)
