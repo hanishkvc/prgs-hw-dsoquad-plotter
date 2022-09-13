@@ -321,12 +321,7 @@ def plot_buffile(g):
         cd[1,j] = adj_ydata(da[i+1])
         cd[2,j] = adj_ydata(da[i+2])
         cd[3,j] = adj_ydata(da[i+3])
-    g['ycDMin'] = np.min(cd[yc])
-    g['ycDMax'] = np.max(cd[yc])
-    g['ycDMid'] = (g['ycDMin'] + g['ycDMax'])/2
-    g['ycDThreshold'] = (g['ycDMid'] - g['ycDMin'])*0.7
-    print("INFO:PlotBufFile:C{}: Data Raw[{} to {}] Adjusted[{} to {}] Mid[{}] Threshold[{}]".format(yc, np.min(rd), np.max(rd), g['ycDMin'], g['ycDMax'], g['ycDMid'], g['ycDThreshold']))
-    print("INFO:PlotBufFile:C{}:\n\tHistoRaw:{}\n\tHistoAdj:{}".format(yc, np.histogram(rd), np.histogram(cd[yc])))
+
     fig, ax = plt.subplots()
     g['fig'] = fig
     g['ax'] = ax
@@ -345,6 +340,14 @@ def plot_buffile(g):
             yvB = - g['ypos'][i] * g['vpixel'][i]
             yvT = (VIRT_DATASPACE - g['ypos'][i]) * g['vpixel'][i]
             g['ycFD'] = fd
+
+    g['ycDMin'] = np.min(cd[yc])
+    g['ycDMax'] = np.max(cd[yc])
+    g['ycDMid'] = (g['ycDMin'] + g['ycDMax'])/2
+    g['ycDThreshold'] = (g['ycDMid'] - g['ycDMin'])*0.7
+    print("INFO:PlotBufFile:C{}: Data Raw[{} to {}] Adjusted[{} to {}] Mid[{}] Threshold[{}]".format(yc, np.min(rd), np.max(rd), g['ycDMin'], g['ycDMax'], g['ycDMid'], g['ycDThreshold']))
+    print("INFO:PlotBufFile:C{}:\n\tHistoRaw:{}\n\tHistoAdj:{}".format(yc, np.histogram(rd), np.histogram(cd[yc])))
+
     ax.grid(True)
     #plt.locator_params('both', tight=True)
     #plt.locator_params('y', nbins=8)
