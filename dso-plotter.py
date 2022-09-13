@@ -246,10 +246,14 @@ def show_location(ev):
             if not bFindUp:
                 cntUpDown += 1
                 bFindUp = True
+    xvDelta = xval-g['prevXVal']
+    yvDelta = yval-g['prevYVal']
+    singleCycleTime = xvDelta/(cntUpDown/2)
+    freq = 1/singleCycleTime
     g['prevXYText'].set_text(" Prev: {}, {}".format(g['prevXVal'], g['prevYVal']))
     g['curXYText'].set_text("  Cur: {}, {}".format(xval, yval))
-    g['deltaXYText'].set_text("Delta: {}, {}".format(xval-g['prevXVal'], yval-g['prevYVal']))
-    g['freqText'].set_text(" Freq: UpDown[{}] ".format(cntUpDown))
+    g['deltaXYText'].set_text("Delta: {}, {}".format(xvDelta, yvDelta))
+    g['freqText'].set_text(" Freq: UpDown[{}] Freq[{}]".format(cntUpDown, freq))
     g['prevXVal'] = xval
     g['prevYVal'] = yval
     g['fig'].canvas.draw()
