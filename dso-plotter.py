@@ -75,7 +75,8 @@ argsHelp = """
 Usage:
     --file <path/dso_saved_buf_file>
       the saved buf file that should be plotted
-    --format buf
+    --format <buf|dat>
+      load either the dat or the buf signal/waveform dump/save file
     --channels <0|1|2|3|01|13|0123|...>
       specify which channels should be displayed as part of the plot
     --dtype <b|B>
