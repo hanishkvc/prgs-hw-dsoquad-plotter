@@ -88,6 +88,7 @@ Usage:
       same additionally to the original signal data.
       convolve or convolve:[w1,w2,...wN]
       fft or fft:ratioOfDataTowardsEndToClearToZero
+
 Interactions:
     * clicking a location on the plot will give its voltage and time info
     * when two different locations have been clicked on the plot
@@ -313,7 +314,8 @@ def plot_buffile(g):
     g['ycDMax'] = np.max(cd[yc])
     g['ycDMid'] = (g['ycDMin'] + g['ycDMax'])/2
     g['ycDThreshold'] = (g['ycDMid'] - g['ycDMin'])*0.7
-    print("INFO:PlotBufFile:C{} Data: Raw[{} to {}] Adjusted[{} to {}] Mid[{}] Threshold[{}]".format(yc, np.min(rd), np.max(rd), g['ycDMin'], g['ycDMax'], g['ycDMid'], g['ycDThreshold']))
+    print("INFO:PlotBufFile:C{}: Data Raw[{} to {}] Adjusted[{} to {}] Mid[{}] Threshold[{}]".format(yc, np.min(rd), np.max(rd), g['ycDMin'], g['ycDMax'], g['ycDMid'], g['ycDThreshold']))
+    print("INFO:PlotBufFile:C{}:\n\tHistoRaw:{}\n\tHistoAdj:{}".format(yc, np.histogram(rd), np.histogram(cd[yc])))
     fig, ax = plt.subplots()
     g['fig'] = fig
     g['ax'] = ax
