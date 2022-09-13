@@ -83,12 +83,16 @@ Usage:
     --ytickschannel <0|1|2|3>
       specify the channel that will be used for deciding the y ticks.
       Defaults to the 1st channel in the specified list of channels.
+    --filterdata <convolve|fft|"">
+      filter the signal data using the specified logic and plot the
+      same additionally to the original signal data.
 """
-argsValid = [ "file", "format", "channels", "dtype", "ytickschannel" ]
+argsValid = [ "file", "format", "channels", "dtype", "ytickschannel", "filterdata" ]
 def process_args(g, args):
     g['channels'] = "0123"
     g['dtype'] = "B"
     g['ytickschannel'] = "?"
+    g['filterdata'] = ""
     iArg = 0
     while iArg < len(args)-1:
         iArg += 1
@@ -216,6 +220,20 @@ def show_location(ev):
     g['fig'].canvas.draw()
 
 
+def filter_data(cd, stype):
+    #np.convolve(cd[i], [0.1,0.2,0.4,0.2,0.1])
+    #np.convolve(cd[i], [0.1,0.1,0.1,0.1,0.2,0.1,0.1,0.1,0.1])
+    if stype == 'convolve':
+        fd = np.convolve(cd, np.ones(10)*0.1)
+    elif stype == "fft":
+        fd = np.fft.fft(cd)
+        fd[int(len(fd)*0.02):] = 0
+        fd = np.fft.ifft(fd)
+    else:
+        fd = cd
+    return fd
+
+
 def plot_buffile(g):
     f = open(g['file'], "rb")
     d = f.read()
@@ -245,6 +263,9 @@ def plot_buffile(g):
         if not ("{}".format(i) in g['channels']):
             continue
         ax.plot(cd[i])
+        if g['filterdata'] != "":
+            fd = filter_data(cd[i], g['filterdata'])
+            ax.plot(fd)
         ax.annotate("C{}:{}".format(i, g['vdiv'][i]), (0,cd[i][0]))
         ax.axhline(g['ypos'][i], 0, 4096, color='r')
         if i == yc:
