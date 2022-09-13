@@ -86,6 +86,8 @@ Usage:
     --filterdata <convolve|fft|"">
       filter the signal data using the specified logic and plot the
       same additionally to the original signal data.
+      convolve or convolve:[w1,w2,...wN]
+      fft or fft:ratioOfDataTowardsEndToClearToZero
 """
 argsValid = [ "file", "format", "channels", "dtype", "ytickschannel", "filterdata" ]
 def process_args(g, args):
@@ -223,11 +225,20 @@ def show_location(ev):
 def filter_data(cd, stype):
     #np.convolve(cd[i], [0.1,0.2,0.4,0.2,0.1])
     #np.convolve(cd[i], [0.1,0.1,0.1,0.1,0.2,0.1,0.1,0.1,0.1])
-    if stype == 'convolve':
-        fd = np.convolve(cd, np.ones(10)*0.1)
-    elif stype == "fft":
+    if stype.startswith('convolve'):
+        if ":" in stype:
+            convd = eval(stype.split(":")[1])
+        else:
+            convd = np.ones(10)*0.1
+        fd = np.convolve(cd, convd)
+    elif stype.startswith("fft"):
+        sargs = stype.split(":")
+        if len(sargs) == 2:
+            ratio = eval(sargs[1])
+        else:
+            ratio = 0.02
         fd = np.fft.fft(cd)
-        fd[int(len(fd)*0.02):] = 0
+        fd[int(len(fd)*ratio):] = 0
         fd = np.fft.ifft(fd)
     else:
         fd = cd
@@ -254,7 +265,9 @@ def plot_buffile(g):
         cd[1,j] = adj_ydata(da[i+1])
         cd[2,j] = adj_ydata(da[i+2])
         cd[3,j] = adj_ydata(da[i+3])
-    print("INFO:PlotBufFile:C{} Data: Raw[{} to {}] Adjusted[{} to {}]".format(yc, np.min(rd), np.max(rd), np.min(cd[yc]), np.max(cd[yc])))
+    g['ycDMin'] = np.min(cd[yc])
+    g['ycDMax'] = np.max(cd[yc])
+    print("INFO:PlotBufFile:C{} Data: Raw[{} to {}] Adjusted[{} to {}]".format(yc, np.min(rd), np.max(rd), g['ycDMin'], g['ycDMax']))
     fig, ax = plt.subplots()
     g['fig'] = fig
     g['ax'] = ax
