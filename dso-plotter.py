@@ -227,7 +227,11 @@ def show_location(ev):
     else:
         bFindUp = False
     cntUpDown = 0
-    for x in range(x0, x1):
+    if x0 < x1:
+        xD = 1
+    else:
+        xD = -1
+    for x in range(x0, x1, xD):
         cVal = g['ycFD'][x]
         dVal = cVal - pVal
         dValACC += dVal
