@@ -328,13 +328,13 @@ def plot_datfile(g):
     da = array.array(g['dtype']) # control whether to treat as signed or unsigned
     da.frombytes(d)
     cd = np.zeros((NUM_CHANNELS, DATFILE_CHANNELSIZE))
-    cb = np.zeros((NUM_CHANNELS, 1))
+    g['ypos'] = np.zeros((NUM_CHANNELS, 1))
     for i in range(0, DATFILE_TOTALSIZE):
         cid = int(i/DATFILE_CHANNELSIZE)
         dind = i % DATFILE_CHANNELSIZE
         if dind >= 0x188:
             if dind == 0x18d:
-                cb[cid] = da[i]
+                g['ypos'][cid] = da[i]
             continue
         cd[cid, dind] = da[i]
     fig, ax = plt.subplots()
@@ -342,7 +342,8 @@ def plot_datfile(g):
         if not ("{}".format(i) in g['channels']):
             continue
         ax.plot(cd[i])
-        ax.axhline(cb[i])
+        ax.annotate("C{}".format(i), (0,cd[i][0]))
+        ax.axhline(g['ypos'][i], color='r')
         fd = filter_data(cd[i], g['filterdata'])
         if g['filterdata'] != "":
             ax.plot(fd)
