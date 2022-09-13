@@ -139,6 +139,9 @@ vdivList = [
 ]
 
 def parse_vdiv_index(ind):
+    if (ind < 0) or (ind >= len(vdivList)):
+        print("DBUG:ParseVDivIndex:{}: Corrupt or Unsupported/New Vdiv".format(ind))
+        exit(50)
     return vdivList[ind][0], vdivList[ind][1]*vdivRefBase
 
 
