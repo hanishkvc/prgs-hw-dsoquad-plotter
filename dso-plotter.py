@@ -307,6 +307,34 @@ def fixif_partialdata_window(din, cid):
     return din
 
 
+DATFILE_TOTALSIZE = 2048
+DATFILE_CHANNELSIZE = 512
+def plot_datfile(g):
+    f = open(g['file'], "rb")
+    d = f.read()
+    if (len(d) != DATFILE_TOTALSIZE):
+        print("ERRR:PlotDatFile:FileSize doesnt match")
+        exit(1)
+    da = array.array(g['dtype']) # control whether to treat as signed or unsigned
+    da.frombytes(d)
+    cd = np.zeros((NUM_CHANNELS, DATFILE_CHANNELSIZE))
+    for i in range(0, DATFILE_TOTALSIZE):
+        cid = int(i/DATFILE_CHANNELSIZE)
+        dind = i % DATFILE_CHANNELSIZE
+        cd[cid, dind] = da[i]
+    fig, ax = plt.subplots()
+    for i in range(NUM_CHANNELS):
+        if not ("{}".format(i) in g['channels']):
+            continue
+        ax.plot(cd[i])
+        fd = filter_data(cd[i], g['filterdata'])
+        if g['filterdata'] != "":
+            ax.plot(fd)
+    plt.title(g['file'])
+    plt.tight_layout()
+    plt.show()
+
+
 def plot_buffile(g):
     f = open(g['file'], "rb")
     d = f.read()
@@ -388,4 +416,7 @@ def plot_buffile(g):
 
 process_args(g, sys.argv)
 print(g)
-plot_buffile(g)
+if g['format'] == "dat":
+    plot_datfile(g)
+else:
+    plot_buffile(g)
