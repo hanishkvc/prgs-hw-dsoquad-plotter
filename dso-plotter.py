@@ -217,7 +217,7 @@ def adj_ydata(yin):
     return yin-56
 
 
-def show_location(ev):
+def show_info(ev):
     xval = ev.xdata * g['tpixel']
     yval = g['yvB'] + (ev.ydata * g['yvPixel'])
     print(ev, xval, yval)
@@ -317,7 +317,7 @@ def plot_buffile(g):
     fig, ax = plt.subplots()
     g['fig'] = fig
     g['ax'] = ax
-    fig.canvas.mpl_connect('button_press_event', show_location)
+    fig.canvas.mpl_connect('button_press_event', show_info)
     for i in range(NUM_CHANNELS):
         if not ("{}".format(i) in g['channels']):
             continue
