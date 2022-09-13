@@ -59,9 +59,9 @@ import array
 
 VIRT_DIVS = 8
 VIRT_DATASPACE = 200 # 240 vertical space divided into 8 units of data, ~0.5 unit of bottom menu space, 1 unit of top menu space
-HORI_DATASPACE = 512
-HIDDEN_SCREENS = 8
-HORI_TOTALSPACE = HORI_DATASPACE * HIDDEN_SCREENS
+HORI_SINGLEWINDOW_SPACE = 512
+HIDDEN_WINDOWS = 8
+HORI_ALLWINDOWS_SPACE = HORI_SINGLEWINDOW_SPACE * HIDDEN_WINDOWS
 DSCR_HORI_TDIVS = 13
 HORI_TDIV_DATASAMPLES = 30
 
@@ -294,7 +294,7 @@ def filter_data(cd, stype):
 
 
 def fixif_partialdata_window(din, cid):
-    for ind in range(HORI_DATASPACE - 4, HORI_TOTALSPACE):
+    for ind in range(HORI_SINGLEWINDOW_SPACE - 4, HORI_ALLWINDOWS_SPACE):
         min = np.min(din[ind:])
         max = np.max(din[ind:])
         if min == max:
@@ -307,7 +307,7 @@ def fixif_partialdata_window(din, cid):
 def plot_buffile(g):
     f = open(g['file'], "rb")
     d = f.read()
-    if (len(d) != HORI_TOTALSPACE*NUM_CHANNELS+BUFFILE_META_SIZE):
+    if (len(d) != HORI_ALLWINDOWS_SPACE*NUM_CHANNELS+BUFFILE_META_SIZE):
         print("ERRR:PlotBufFile:FileSize doesnt match")
         exit(1)
     da = array.array(g['dtype']) # control whether to treat as signed or unsigned
@@ -366,7 +366,7 @@ def plot_buffile(g):
     g['yvB'] = yvB
     g['yvT'] = yvT
     g['yvPixel'] = (yvT-yvB)/VIRT_DATASPACE
-    xticks = np.arange(0, HORI_TOTALSPACE, HORI_TDIV_DATASAMPLES*10)
+    xticks = np.arange(0, HORI_ALLWINDOWS_SPACE, HORI_TDIV_DATASAMPLES*10)
     xlabels = friendly_times(xticks*g['tpixel'])
     ax.set_xticks(xticks, xlabels)
     ax.xaxis.set_minor_locator(MultipleLocator(30))
