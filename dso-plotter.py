@@ -214,9 +214,35 @@ def show_location(ev):
     xval = ev.xdata * g['tpixel']
     yval = g['yvB'] + (ev.ydata * g['yvPixel'])
     print(ev, xval, yval)
+    g['prevX'] = g['curX']
+    g['prevY'] = g['curY']
+    g['curX'] = ev.xdata
+    g['curY'] = ev.ydata
+    x0 = int(g['prevX'])
+    x1 = int(g['curX'])
+    pVal = g['ycFD'][x0]
+    dValACC = 0
+    bFindUp = True
+    cntUpDown = 0
+    for x in range(x0, x1):
+        cVal = g['ycFD'][x]
+        dVal = cVal - pVal
+        dValACC += dVal
+        pVal = cVal
+        if dValACC > g['ycDThreshold']:
+            dValACC = 0
+            if bFindUp:
+                cntUpDown += 1
+                bFindUp = False
+        if dValACC < -g['ycDThreshold']:
+            dValACC = 0
+            if not bFindUp:
+                cntUpDown += 1
+                bFindUp = True
     g['prevXYText'].set_text(" Prev: {}, {}".format(g['prevXVal'], g['prevYVal']))
     g['curXYText'].set_text("  Cur: {}, {}".format(xval, yval))
     g['deltaXYText'].set_text("Delta: {}, {}".format(xval-g['prevXVal'], yval-g['prevYVal']))
+    g['freqText'].set_text(" Freq: UpDown[{}] ".format(cntUpDown))
     g['prevXVal'] = xval
     g['prevYVal'] = yval
     g['fig'].canvas.draw()
@@ -267,6 +293,8 @@ def plot_buffile(g):
         cd[3,j] = adj_ydata(da[i+3])
     g['ycDMin'] = np.min(cd[yc])
     g['ycDMax'] = np.max(cd[yc])
+    g['ycDMid'] = (g['ycDMin'] + g['ycDMax'])/2
+    g['ycDThreshold'] = (g['ycDMid'] - g['ycDMin'])*0.8
     print("INFO:PlotBufFile:C{} Data: Raw[{} to {}] Adjusted[{} to {}]".format(yc, np.min(rd), np.max(rd), g['ycDMin'], g['ycDMax']))
     fig, ax = plt.subplots()
     g['fig'] = fig
@@ -276,14 +304,15 @@ def plot_buffile(g):
         if not ("{}".format(i) in g['channels']):
             continue
         ax.plot(cd[i])
+        fd = filter_data(cd[i], g['filterdata'])
         if g['filterdata'] != "":
-            fd = filter_data(cd[i], g['filterdata'])
             ax.plot(fd)
         ax.annotate("C{}:{}".format(i, g['vdiv'][i]), (0,cd[i][0]))
         ax.axhline(g['ypos'][i], 0, 4096, color='r')
         if i == yc:
             yvB = - g['ypos'][i] * g['vpixel'][i]
             yvT = (VIRT_DATASPACE - g['ypos'][i]) * g['vpixel'][i]
+            g['ycFD'] = fd
     ax.grid(True)
     #plt.locator_params('both', tight=True)
     #plt.locator_params('y', nbins=8)
@@ -306,8 +335,11 @@ def plot_buffile(g):
     g['prevXYText'] = ax.text(0, 0.95, "", transform=ax.transAxes, fontfamily="monospace")
     g['curXYText'] = ax.text(0, 0.90, "", transform=ax.transAxes, fontfamily="monospace")
     g['deltaXYText'] = ax.text(0, 0.85, "", transform=ax.transAxes, fontfamily="monospace")
+    g['freqText'] = ax.text(0, 0.80, "", transform=ax.transAxes, fontfamily="monospace")
     g['prevXVal'] = 0
     g['prevYVal'] = 0
+    g['curX'] = 0
+    g['curY'] = 0
     plt.title(g['file'])
     plt.tight_layout()
     plt.show()
