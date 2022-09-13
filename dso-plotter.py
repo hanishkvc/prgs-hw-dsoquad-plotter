@@ -57,8 +57,9 @@ import sys
 import array
 
 
-VIRT_DIVS = 8
-VIRT_DATASPACE = 200 # 240 vertical space divided into 8 units of data, ~0.5 unit of bottom menu space, 1 unit of top menu space
+DSCR_VIRT_VDIVS = 8
+VIRT_VDIV_LEVELS = 25
+VIRT_DATASPACE = 200 # VIRT_VDIV_LEVELS * DSCR_VIRT_VDIVS
 HORI_SINGLEWINDOW_SPACE = 512
 HIDDEN_WINDOWS = 8
 HORI_ALLWINDOWS_SPACE = HORI_SINGLEWINDOW_SPACE * HIDDEN_WINDOWS
@@ -216,7 +217,7 @@ def parse_meta(g):
     for i in range(0, 16, 4): # Total entries, Entries/Channel
         vd = meta[i+2]
         vdText, vdVal = parse_vdiv_index(vd)
-        vpixel = vdVal*VIRT_DIVS/VIRT_DATASPACE # 8 divisions on the screen, mapped to space set aside for plotting
+        vpixel = vdVal*DSCR_VIRT_VDIVS/VIRT_DATASPACE # 8 divisions on the screen, mapped to space set aside for plotting
         g['vdiv'].append(vdVal)
         g['vpixel'].append(vpixel)
         ypos = meta[i+3]
@@ -348,6 +349,7 @@ def plot_datfile(g):
         if g['filterdata'] != "":
             ax.plot(fd)
     ax.xaxis.set_major_locator(MultipleLocator(HORI_TDIV_DATASAMPLES))
+    ax.yaxis.set_major_locator(MultipleLocator(VIRT_VDIV_LEVELS))
     plt.grid()
     plt.title(g['file'])
     plt.tight_layout()
@@ -411,8 +413,8 @@ def plot_buffile(g):
         yB = 0
         yT = VIRT_DATASPACE-1
     ax.set_ylim(yB, yT)
-    labels = np.linspace(yvB, yvT, VIRT_DIVS+1)
-    ax.set_yticks(np.linspace(yB, yT, VIRT_DIVS+1), labels)
+    labels = np.linspace(yvB, yvT, DSCR_VIRT_VDIVS+1)
+    ax.set_yticks(np.linspace(yB, yT, DSCR_VIRT_VDIVS+1), labels)
     g['yvB'] = yvB
     g['yvT'] = yvT
     g['yvPixel'] = (yvT-yvB)/VIRT_DATASPACE
