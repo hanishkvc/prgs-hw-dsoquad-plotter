@@ -313,7 +313,7 @@ def plot_buffile(g):
     g['ycDMax'] = np.max(cd[yc])
     g['ycDMid'] = (g['ycDMin'] + g['ycDMax'])/2
     g['ycDThreshold'] = (g['ycDMid'] - g['ycDMin'])*0.7
-    print("INFO:PlotBufFile:C{} Data: Raw[{} to {}] Adjusted[{} to {}]".format(yc, np.min(rd), np.max(rd), g['ycDMin'], g['ycDMax']))
+    print("INFO:PlotBufFile:C{} Data: Raw[{} to {}] Adjusted[{} to {}] Mid[{}] Threshold[{}]".format(yc, np.min(rd), np.max(rd), g['ycDMin'], g['ycDMax'], g['ycDMid'], g['ycDThreshold']))
     fig, ax = plt.subplots()
     g['fig'] = fig
     g['ax'] = ax
