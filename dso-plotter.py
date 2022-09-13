@@ -207,7 +207,7 @@ def parse_meta(g):
         g['vpixel'].append(vpixel)
         ypos = meta[i+3]
         g['ypos'].append(ypos)
-        print("\tC{}:{} v/div, {} ypos(adjusted)".format(len(g['vdiv']), vdText, ypos))
+        print("\tC{}:{} v/div, {} ypos(adjusted)".format(len(g['vdiv'])-1, vdText, ypos))
     g['timebase'] = parse_tdiv_index(meta[17])
     g['tpixel'] = g['timebase'][1]/HORI_TDIV_DATASAMPLES
     print("INFO:ParseMeta: time/div:{}".format(g['timebase']))
