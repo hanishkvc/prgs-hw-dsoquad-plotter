@@ -343,7 +343,7 @@ def plot_datfile(g):
             continue
         lines = ax.plot(cd[i])
         ax.annotate("C{}".format(i), (0,cd[i][0]))
-        ax.axhline(g['ypos'][i], color=lines[0].get_color(), alpha=0.5)
+        ax.axhline(g['ypos'][i], color=lines[0].get_color(), alpha=0.4)
         fd = filter_data(cd[i], g['filterdata'])
         if g['filterdata'] != "":
             ax.plot(fd)
@@ -386,7 +386,7 @@ def plot_buffile(g):
         if g['filterdata'] != "":
             ax.plot(fd)
         ax.annotate("C{}:{}".format(i, g['vdiv'][i]), (0,cd[i][0]))
-        ax.axhline(g['ypos'][i], color=lines[0].get_color(), alpha=0.5)
+        ax.axhline(g['ypos'][i], color=lines[0].get_color(), alpha=0.4)
         if i == yc:
             yvB = - g['ypos'][i] * g['vpixel'][i]
             yvT = (VIRT_DATASPACE - g['ypos'][i]) * g['vpixel'][i]
