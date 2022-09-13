@@ -381,12 +381,12 @@ def plot_buffile(g):
         if not ("{}".format(i) in g['channels']):
             continue
         cd[i] = fixif_partialdata_window(cd[i], i)
-        ax.plot(cd[i])
+        lines = ax.plot(cd[i])
         fd = filter_data(cd[i], g['filterdata'])
         if g['filterdata'] != "":
             ax.plot(fd)
         ax.annotate("C{}:{}".format(i, g['vdiv'][i]), (0,cd[i][0]))
-        ax.axhline(g['ypos'][i], 0, 4096, color='r')
+        ax.axhline(g['ypos'][i], color=lines[0].get_color(), alpha=0.5)
         if i == yc:
             yvB = - g['ypos'][i] * g['vpixel'][i]
             yvT = (VIRT_DATASPACE - g['ypos'][i]) * g['vpixel'][i]
