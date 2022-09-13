@@ -347,6 +347,7 @@ def plot_datfile(g):
         fd = filter_data(cd[i], g['filterdata'])
         if g['filterdata'] != "":
             ax.plot(fd)
+    plt.grid()
     plt.title(g['file'])
     plt.tight_layout()
     plt.show()
