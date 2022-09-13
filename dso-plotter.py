@@ -222,7 +222,10 @@ def show_location(ev):
     x1 = int(g['curX'])
     pVal = g['ycFD'][x0]
     dValACC = 0
-    bFindUp = True
+    if pVal < g['ycDMid']:
+        bFindUp = True
+    else:
+        bFindUp = False
     cntUpDown = 0
     for x in range(x0, x1):
         cVal = g['ycFD'][x]
@@ -294,7 +297,7 @@ def plot_buffile(g):
     g['ycDMin'] = np.min(cd[yc])
     g['ycDMax'] = np.max(cd[yc])
     g['ycDMid'] = (g['ycDMin'] + g['ycDMax'])/2
-    g['ycDThreshold'] = (g['ycDMid'] - g['ycDMin'])*0.8
+    g['ycDThreshold'] = (g['ycDMid'] - g['ycDMin'])*0.7
     print("INFO:PlotBufFile:C{} Data: Raw[{} to {}] Adjusted[{} to {}]".format(yc, np.min(rd), np.max(rd), g['ycDMin'], g['ycDMax']))
     fig, ax = plt.subplots()
     g['fig'] = fig
