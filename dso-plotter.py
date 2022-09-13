@@ -259,7 +259,10 @@ def show_info(ev):
                 bFindUp = True
     xvDelta = xval-g['prevXVal']
     yvDelta = yval-g['prevYVal']
-    singleCycleTime = xvDelta/(cntUpDown/2)
+    if (cntUpDown == 0):
+        singleCycleTime = np.NaN
+    else:
+        singleCycleTime = xvDelta/(cntUpDown/2)
     freq = 1/singleCycleTime
     g['prevXYText'].set_text(" Prev: {}, {}".format(g['prevXVal'], g['prevYVal']))
     g['curXYText'].set_text("  Cur: {}, {}".format(xval, yval))
