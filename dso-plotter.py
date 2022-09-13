@@ -290,6 +290,16 @@ def filter_data(cd, stype):
     return fd
 
 
+def fixif_singlewindow_data(din, cid):
+    ind = HORI_DATASPACE - 1
+    min = np.min(din[ind:])
+    max = np.max(din[ind:])
+    if min == max:
+        print("WARN:FixIfSingleWindowData:C{}: Extending single window data".format(cid))
+        din[ind:] = din[ind-1]
+    return din
+
+
 def plot_buffile(g):
     f = open(g['file'], "rb")
     d = f.read()
@@ -323,6 +333,7 @@ def plot_buffile(g):
     for i in range(NUM_CHANNELS):
         if not ("{}".format(i) in g['channels']):
             continue
+        cd[i] = fixif_singlewindow_data(cd[i], i)
         ax.plot(cd[i])
         fd = filter_data(cd[i], g['filterdata'])
         if g['filterdata'] != "":
