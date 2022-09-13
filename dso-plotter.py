@@ -347,6 +347,7 @@ def plot_datfile(g):
         fd = filter_data(cd[i], g['filterdata'])
         if g['filterdata'] != "":
             ax.plot(fd)
+    ax.xaxis.set_major_locator(MultipleLocator(HORI_TDIV_DATASAMPLES))
     plt.grid()
     plt.title(g['file'])
     plt.tight_layout()
