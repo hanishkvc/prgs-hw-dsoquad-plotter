@@ -88,6 +88,11 @@ Usage:
       same additionally to the original signal data.
       convolve or convolve:[w1,w2,...wN]
       fft or fft:ratioOfDataTowardsEndToClearToZero
+Interactions:
+    * clicking a location on the plot will give its voltage and time info
+    * when two different locations have been clicked on the plot
+      * show the difference in voltage and time btw those points
+      * show the number of up/down waveform movements and a rough freq
 """
 argsValid = [ "file", "format", "channels", "dtype", "ytickschannel", "filterdata" ]
 def process_args(g, args):
@@ -95,6 +100,8 @@ def process_args(g, args):
     g['dtype'] = "B"
     g['ytickschannel'] = "?"
     g['filterdata'] = ""
+    if len(args) < 2:
+        args.append("--help")
     iArg = 0
     while iArg < len(args)-1:
         iArg += 1
