@@ -290,13 +290,14 @@ def filter_data(cd, stype):
     return fd
 
 
-def fixif_singlewindow_data(din, cid):
-    ind = HORI_DATASPACE - 1
-    min = np.min(din[ind:])
-    max = np.max(din[ind:])
-    if min == max:
-        print("WARN:FixIfSingleWindowData:C{}: Extending single window data".format(cid))
-        din[ind:] = din[ind-1]
+def fixif_partialdata_window(din, cid):
+    for ind in range(HORI_DATASPACE - 4, HORI_TOTALSPACE):
+        min = np.min(din[ind:])
+        max = np.max(din[ind:])
+        if min == max:
+            print("WARN:FixIfPartialDataWindow:C{}: Extending single/partial data window starting from {}".format(cid, ind))
+            din[ind:] = din[ind-1]
+            break
     return din
 
 
@@ -333,7 +334,7 @@ def plot_buffile(g):
     for i in range(NUM_CHANNELS):
         if not ("{}".format(i) in g['channels']):
             continue
-        cd[i] = fixif_singlewindow_data(cd[i], i)
+        cd[i] = fixif_partialdata_window(cd[i], i)
         ax.plot(cd[i])
         fd = filter_data(cd[i], g['filterdata'])
         if g['filterdata'] != "":
