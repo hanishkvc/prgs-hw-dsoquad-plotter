@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # Plot data captured from DSOQuad Oscilloscope
+# Supports Buf and Dat files for now
 # HanishKVC, 2022
 #
 
@@ -13,6 +14,9 @@ DSO Screen Res: 400x240
 WildCat Buf format files
 ===========================
 
+overview
+-----------
+
 doesnt contain raw adc samples, rather it only contains the values scaled
 and inturn offset to help with direct plotting on the device screen, in a
 easy/relatively straight forward manner.
@@ -25,6 +29,18 @@ So if you want maximum resolution/finer grained data then on DSO select
 
 * as always select a time base / horizontal sensitivity which captures the
   signal sufficiently clearly spread over the horizontal screen space.
+
+
+Disk format
+-------------
+
+16K of data sample containing 4K data samples of Channel 0 to 3 intermixed
+one after the other
+
+* C0:D0 C1:D0 C2:D0 C3:D0 C0:D1 C1:D1 C2:D1 C3:D1 ...... C3:D4095
+
+512 bytes of meta data which gives info about the way individual
+channels were setup
 
 
 Plot vertical
@@ -45,6 +61,15 @@ Plot horizontal
 
 It appears like 30 data samples correspond to 1 time division. And the device
 screen shows 13 time divisions in its full screen (ie no params) mode.
+
+
+Dat Files
+===========
+
+4 sets (corresponding to channel 0,1,2,3) of
+
+* 392 8bit dataSamplesOf Channel + 0000 0000 00BaseLine 0000 + 112 x 00 bytes
+
 
 
 """
