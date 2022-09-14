@@ -243,8 +243,10 @@ def show_info(ev):
     # overlay tdiv
     otdiv = float(g['overlaytimedivs'])
     otdivPixels = otdiv/g['tpixel']
-    for x in range(ev.xdata, HORI_ALLWINDOWS_SPACE, otdivPixels):
+    x = ev.xdata
+    while x < HORI_ALLWINDOWS_SPACE:
         g['ax'].axvline(x, color='r', alpha=0.4)
+        x += otdivPixels
     # Calc Up/Down/Freq
     x0 = int(g['prevX'])
     x1 = int(g['curX'])
