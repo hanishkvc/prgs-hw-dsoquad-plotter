@@ -92,16 +92,29 @@ Usage:
       same additionally to the original signal data.
       convolve or convolve:[w1,w2,...wN]
       fft or fft:ratioOfDataTowardsEndToClearToZero
-    --overlaytimedivs <time>
+    --overlaytimedivs <time[:StringOfCharMarkers]>
       Allows a overlay of timedivs, based on the time granularity
       specified, starting from position where mouse-right button is
       clicked.
+      If a StringOfCharMarkers is specified, place one char at a time
+      from this string into adjacent overlay time divs.
+      NOTE: This only works for buf files and not dat files, bcas dat
+      files dont have time or voltage info in them.
 
 Interactions:
     * clicking a location on the plot will give its voltage and time info
     * when two different locations have been clicked on the plot
       * show the difference in voltage and time btw those points
       * show the number of up/down waveform movements and a rough freq
+    * Clicking anywhere using right mouse button, will show a overlay of
+      timedivs, with a time period specified using --overlaytimedivs. It
+      will also show a set of markers wrt each time div, if user has
+      specified the same as part of --overlaytimedivs.
+
+Examples:
+    ./dso-plotter.py --file Data/UsbMidi/20220914S01/DATA001.BUF --overlaytimedivs 32e-6:S01234567sS01234567sS01234567s
+      * a example trying to look at Midi data capture, with its 32uSec bit time, 3 byte msgs of 1Start+8Data+0Parity+1Stop bits
+
 """
 argsValid = [ "file", "format", "channels", "dtype", "ytickschannel", "filterdata", "overlaytimedivs" ]
 def process_args(g, args):
