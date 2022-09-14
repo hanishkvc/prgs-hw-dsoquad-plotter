@@ -97,7 +97,7 @@ Interactions:
       * show the difference in voltage and time btw those points
       * show the number of up/down waveform movements and a rough freq
 """
-argsValid = [ "file", "format", "channels", "dtype", "ytickschannel", "filterdata" ]
+argsValid = [ "file", "format", "channels", "dtype", "ytickschannel", "filterdata", "overlaytimedivs" ]
 def process_args(g, args):
     g['channels'] = "0123"
     g['dtype'] = "B"
@@ -240,6 +240,12 @@ def show_info(ev):
     g['prevY'] = g['curY']
     g['curX'] = ev.xdata
     g['curY'] = ev.ydata
+    # overlay tdiv
+    otdiv = float(g['overlaytimedivs'])
+    otdivPixels = otdiv/g['tpixel']
+    for x in range(ev.xdata, HORI_ALLWINDOWS_SPACE, otdivPixels):
+        g['ax'].axvline(x, color='r', alpha=0.4)
+    # Calc Up/Down/Freq
     x0 = int(g['prevX'])
     x1 = int(g['curX'])
     pVal = g['ycFD'][x0]
@@ -268,6 +274,7 @@ def show_info(ev):
             if not bFindUp:
                 cntUpDown += 1
                 bFindUp = True
+    # All in
     xvDelta = xval-g['prevXVal']
     yvDelta = yval-g['prevYVal']
     if (cntUpDown == 0):
