@@ -134,6 +134,8 @@ Usage:
       clicked.
       If a StringOfCharMarkers is specified, place one char at a time
       from this string into adjacent overlay time divs.
+      Also show signal data interpreted as binary digital values, wrt
+      each overlaid time division, as it appears at their centers.
       NOTE: This only works for buf files and not dat files, bcas dat
       files dont have time or voltage info in them.
 

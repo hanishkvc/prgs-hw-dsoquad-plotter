@@ -5,8 +5,11 @@ Author: HanishKVC
 Version: 20220914IST2253
 
 
-Usage
-########
+Overview
+##########
+
+General
+=========
 
 Allow one to look at signal captured by the pocket oscilloscope, either
 has a Dat file or Buf file.
@@ -23,6 +26,28 @@ it contains is the baseline wrt each channel.
 
 In addition to the channel signal data, Buf file contains meta data like
 volts/div, times/div, channel baseline levels, ...
+
+Additional
+============
+
+One can get the following additional info from / wrt buf files, when
+interacting with the plot
+
+* voltage and time wrt each position on the plot
+
+* diff in voltage and time between the last two clicked positions.
+
+* guess of freq wrt the data signal
+
+* overlaying of user specified time divisions from a position specified
+  by them. This also includes custom markers wrt each of these timedivs.
+
+  It also shows a guessed binary digital data interpretation, wrt data
+  signal in each of these overlaid user specified time divisions.
+
+
+Usage
+########
 
 Cmdline arguments
 ===================
@@ -69,6 +94,9 @@ Arguments that may be used if required
 
     If a StringOfCharMarkers is specified, place one char at a time
     from this string into adjacent overlay time divs.
+
+    Also show signal data interpreted as binary digital values, wrt
+    each overlaid time division, as it appears at their centers.
 
     NOTE: This only works for buf files and not dat files, bcas dat
     files dont have time or voltage info in them.
