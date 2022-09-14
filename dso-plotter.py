@@ -42,6 +42,17 @@ one after the other
 512 bytes of meta data which gives info about the way individual
 channels were setup
 
+Capture Buffer Mode
+---------------------
+
+Make short presses on the right toggle button till it shows a
+small window within a very long/wide window at the bottom center,
+this potentially corresponds to the large buffer mode (with a yellow
+triangular waveform, even thou the doc seems to say orange???)
+
+However even thou it is supposed to capture 4K samples, with the midi
+test script, I seem to be seeing only NoteOff commands/messages and
+not the NoteOn messages?????
 
 Plot vertical
 ==============
