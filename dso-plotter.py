@@ -243,7 +243,8 @@ def show_info(ev):
     g['curX'] = ev.xdata
     g['curY'] = ev.ydata
     # overlay tdiv
-    for l in g['otdivlines']:
+    for i in range(len(g['otdivlines'])):
+        l = g['otdivlines'].pop()
         l.remove()
     otdiv = float(g['overlaytimedivs'])
     otdivPixels = otdiv/g['tpixel']
