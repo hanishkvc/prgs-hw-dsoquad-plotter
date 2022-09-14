@@ -92,6 +92,10 @@ Usage:
       same additionally to the original signal data.
       convolve or convolve:[w1,w2,...wN]
       fft or fft:ratioOfDataTowardsEndToClearToZero
+    --overlaytimedivs <time>
+      Allows a overlay of timedivs, based on the time granularity
+      specified, starting from position where mouse-right button is
+      clicked.
 
 Interactions:
     * clicking a location on the plot will give its voltage and time info
@@ -252,7 +256,7 @@ def show_info(ev):
         otdivPixels = otdiv/g['tpixel']
         x = ev.xdata
         while x < HORI_ALLWINDOWS_SPACE:
-            l = g['ax'].axvline(x, color='r', alpha=0.05)
+            l = g['ax'].axvline(x, color='r', alpha=0.1)
             g['otdivlines'].append(l)
             x += otdivPixels
     # Calc Up/Down/Freq
