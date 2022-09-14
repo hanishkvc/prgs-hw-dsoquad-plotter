@@ -77,10 +77,10 @@ screen shows 13 time divisions in its full screen (ie no params) mode.
 Dat Files
 ===========
 
-4 sets (corresponding to channel 0,1,2,3) of
+4 sets of 512 bytes each, corresponding to channel 0, 1, 2, 3. Each
+consisting of
 
-* 392 8bit dataSamplesOf Channel + 0000 0000 00BaseLine 0000 + 112 x 00 bytes
-
+392 8bit dataSamplesOf Channel + 0000 0000 00BaseLine 0000 + 112 x 00 bytes
 
 
 """
