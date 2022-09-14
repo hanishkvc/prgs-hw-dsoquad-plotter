@@ -295,7 +295,7 @@ def show_info(ev):
         for i in range(len(g['otdivlines'])):
             l = g['otdivlines'].pop()
             l.remove()
-        otdiv = float(otdivTime)
+        otdiv = eval(otdivTime)
         otdivPixels = otdiv/g['tpixel']
         x = ev.xdata
         i = 0
