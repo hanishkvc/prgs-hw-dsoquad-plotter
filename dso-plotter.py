@@ -311,6 +311,7 @@ def show_info(ev):
         otdivSigValPixels = otdivPixels/2
         tx = ev.xdata
         dx = tx + otdivSigValPixels
+        dy = ev.ydata - 4
         i = 0
         while tx < HORI_ALLWINDOWS_SPACE:
             l = g['ax'].axvline(tx, color='r', alpha=0.1)
@@ -322,7 +323,7 @@ def show_info(ev):
                     vtext = "1"
                 else:
                     vtext = "0"
-                g['ax'].text(dx, ev.ydata, vtext)
+                g['ax'].text(dx, dy, vtext, color="r")
                 i += 1
             tx += otdivPixels
             dx = tx + otdivSigValPixels
