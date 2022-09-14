@@ -1,6 +1,6 @@
-##################
-DSOQuad/DS203
-##################
+#######################
+DSOQuad/DS203 Plotter
+#######################
 Author: HanishKVC
 Version: 20220914IST2253
 
@@ -14,6 +14,8 @@ General
 Allow one to look at signal captured by the pocket oscilloscope, either
 has a Dat file or Buf file.
 
+This is tested for DSOQuad / DS203 wrt the Wildcat firmware.
+
 Note that the sampled data is stored in these files similar to how it
 would appear on the device screen, so to get enough resolution in the
 captured data, ensure that the Volts/Div and Time/Div is fine enough
@@ -26,6 +28,9 @@ it contains is the baseline wrt each channel.
 
 In addition to the channel signal data, Buf file contains meta data like
 volts/div, times/div, channel baseline levels, ...
+Buf files are potentially more useful, if the oscilloscope is setup to
+dump data when in the large buffer mode.
+
 
 Additional
 ============
@@ -45,6 +50,8 @@ interacting with the plot
   It also shows a guessed binary digital data interpretation, wrt data
   signal in each of these overlaid user specified time divisions.
 
+The above correspond to signal data belonging to ytickschannel.
+
 
 Usage
 ########
@@ -54,57 +61,57 @@ Cmdline arguments
 
 The needed arguments
 
-  --file <path/dso_saved_buf_file>
+--file <path/dso_saved_buf_file>
 
-    the saved buf file that should be plotted
+  the saved buf file that should be plotted
 
 Arguments that may be used if required
 
-  --format <buf|dat|auto>
+--format <buf|dat|auto>
 
-    load either the dat or the buf signal/waveform dump/save file
+  load either the dat or the buf signal/waveform dump/save file
 
-  --channels <0|1|2|3|01|13|0123|...>
+--channels <0|1|2|3|01|13|0123|...>
 
-    specify which channels should be displayed as part of the plot
+  specify which channels should be displayed as part of the plot
 
-  --dtype <b|B>
+--dtype <b|B>
 
-    whether to treat the sample data as signed or unsigned(default)
+  whether to treat the sample data as signed or unsigned(default)
 
-  --ytickschannel <0|1|2|3>
+--ytickschannel <0|1|2|3>
 
-    specify the channel that will be used for deciding the y ticks.
-    Defaults to the 1st channel in the specified list of channels.
+  specify the channel that will be used for deciding the y ticks.
+  Defaults to the 1st channel in the specified list of channels.
 
-  --filterdata <convolve|fft|"">
+--filterdata <convolve|fft|"">
 
-    filter the signal data using the specified logic and plot the
-    same additionally to the original signal data.
+  filter the signal data using the specified logic and plot the
+  same additionally to the original signal data.
 
-    convolve or convolve:[w1,w2,...wN]
+  convolve or convolve:[w1,w2,...wN]
 
-    fft or fft:ratioOfDataTowardsEndToClearToZero
+  fft or fft:ratioOfDataTowardsEndToClearToZero
 
-  --overlaytimedivs <time[:StringOfCharMarkers]>
+--overlaytimedivs <time[:StringOfCharMarkers]>
 
-    Allows a overlay of timedivs, based on the time granularity
-    specified, starting from position where mouse-right button is
-    clicked.
+  Allows a overlay of timedivs, based on the time granularity
+  specified, starting from position where mouse-right button is
+  clicked.
 
-    If a StringOfCharMarkers is specified, place one char at a time
-    from this string into adjacent overlay time divs.
+  If a StringOfCharMarkers is specified, place one char at a time
+  from this string into adjacent overlay time divs.
 
-    Also show signal data interpreted as binary digital values, wrt
-    each overlaid time division, as it appears at their centers.
+  Also show signal data interpreted as binary digital values, wrt
+  each overlaid time division, as it appears at their centers.
 
-    NOTE: This only works for buf files and not dat files, bcas dat
-    files dont have time or voltage info in them.
+  NOTE: This only works for buf files and not dat files, bcas dat
+  files dont have time or voltage info in them.
 
-    As the time/div supported by the oscilloscope need not directly
-    align with the freq characteristic / bitrate of the signal being
-    monitored, so one can use this option to overlay custom time/divs
-    that matches what one is interested in wrt the signals.
+  As the time/div supported by the oscilloscope need not directly
+  align with the freq characteristic / bitrate of the signal being
+  monitored, so one can use this option to overlay custom time/divs
+  that matches what one is interested in wrt the signals.
 
 
 Interactions
@@ -131,5 +138,5 @@ Examples
 
 A example trying to look at Midi data capture, with its 32uSec bit time, 3 byte msgs of 1Start+8Data+0Parity+1Stop bits
 
-./dso-plotter.py --file Data/UsbMidi/20220914S01/DATA001.BUF --overlaytimedivs 32e-6:S01234567sS01234567sS01234567s
+./dso-plotter.py --file path/to/file.buf --overlaytimedivs 32e-6:S01234567sS01234567sS01234567s
 
