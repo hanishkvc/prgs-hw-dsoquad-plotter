@@ -308,15 +308,24 @@ def show_info(ev):
             l.remove()
         otdiv = eval(otdivTime)
         otdivPixels = otdiv/g['tpixel']
+        otdivSigValPixels = otdivPixels/2
         x = ev.xdata
+        dx = x + otdivSigValPixels
         i = 0
         while x < HORI_ALLWINDOWS_SPACE:
             l = g['ax'].axvline(x, color='r', alpha=0.1)
             g['otdivlines'].append(l)
             if i < len(otdivMarkers):
                 t = g['ax'].text(x, ev.ydata, otdivMarkers[i])
+                cVal = g['ycFD'][round(dx)]
+                if cVal > g['ycDMid']:
+                    vtext = "1"
+                else:
+                    vtext = "0"
+                g['ax'].text(dx, ev.ydata, vtext)
                 i += 1
             x += otdivPixels
+            dx = x + otdivSigValPixels
     # Calc Up/Down/Freq
     x0 = int(g['prevX'])
     x1 = int(g['curX'])
