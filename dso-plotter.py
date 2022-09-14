@@ -243,16 +243,18 @@ def show_info(ev):
     g['curX'] = ev.xdata
     g['curY'] = ev.ydata
     # overlay tdiv
-    for i in range(len(g['otdivlines'])):
-        l = g['otdivlines'].pop()
-        l.remove()
-    otdiv = float(g['overlaytimedivs'])
-    otdivPixels = otdiv/g['tpixel']
-    x = ev.xdata
-    while x < HORI_ALLWINDOWS_SPACE:
-        l = g['ax'].axvline(x, color='r', alpha=0.05)
-        g['otdivlines'].append(l)
-        x += otdivPixels
+    otdivStr = g.get('overlaytimedivs', "")
+    if (otdivStr != "") and (ev.button == 3):
+        for i in range(len(g['otdivlines'])):
+            l = g['otdivlines'].pop()
+            l.remove()
+        otdiv = float(g['overlaytimedivs'])
+        otdivPixels = otdiv/g['tpixel']
+        x = ev.xdata
+        while x < HORI_ALLWINDOWS_SPACE:
+            l = g['ax'].axvline(x, color='r', alpha=0.05)
+            g['otdivlines'].append(l)
+            x += otdivPixels
     # Calc Up/Down/Freq
     x0 = int(g['prevX'])
     x1 = int(g['curX'])
