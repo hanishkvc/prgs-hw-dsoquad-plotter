@@ -70,6 +70,8 @@ NUM_CHANNELS = 4
 BUFFILE_META_SIZE = 512
 
 g={}
+g['otdivlines'] = []
+
 
 
 argsHelp = """
@@ -241,11 +243,14 @@ def show_info(ev):
     g['curX'] = ev.xdata
     g['curY'] = ev.ydata
     # overlay tdiv
+    for l in g['otdivlines']:
+        l.remove()
     otdiv = float(g['overlaytimedivs'])
     otdivPixels = otdiv/g['tpixel']
     x = ev.xdata
     while x < HORI_ALLWINDOWS_SPACE:
-        g['ax'].axvline(x, color='r', alpha=0.4)
+        l = g['ax'].axvline(x, color='r', alpha=0.05)
+        g['otdivlines'].append(l)
         x += otdivPixels
     # Calc Up/Down/Freq
     x0 = int(g['prevX'])
