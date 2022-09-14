@@ -248,16 +248,25 @@ def show_info(ev):
     g['curY'] = ev.ydata
     # overlay tdiv
     otdivStr = g.get('overlaytimedivs', "")
+    if ":" in otdivStr:
+        otdivTime, otdivMarkers = otdivStr.split(":")
+    else:
+        otdivTime = otdivStr
+        otdivMarkers = "0123456789ABCDEF"
     if (otdivStr != "") and (ev.button == 3):
         for i in range(len(g['otdivlines'])):
             l = g['otdivlines'].pop()
             l.remove()
-        otdiv = float(g['overlaytimedivs'])
+        otdiv = float(otdivTime)
         otdivPixels = otdiv/g['tpixel']
         x = ev.xdata
+        i = 0
         while x < HORI_ALLWINDOWS_SPACE:
             l = g['ax'].axvline(x, color='r', alpha=0.1)
             g['otdivlines'].append(l)
+            if i < len(otdivMarkers):
+                t = g['ax'].text(x, ev.ydata, otdivMarkers[i])
+                i += 1
             x += otdivPixels
     # Calc Up/Down/Freq
     x0 = int(g['prevX'])
