@@ -1,0 +1,107 @@
+##################
+DSOQuad/DS203
+##################
+Author: HanishKVC
+Version: 20220914IST2253
+
+
+Usage
+########
+
+Allow one to look at signal captured by the pocket oscilloscope, either
+has a Dat file or Buf file.
+
+Note that the sampled data is stored in these files similar to how it
+would appear on the device screen, so to get enough resolution in the
+captured data, ensure that the Volts/Div and Time/Div is fine enough
+to capture what you are interested in.
+
+Dat file doesnt contain meta data wrt the captured signal and also it
+contains only one screen worth of data (ie around 400 samples). Other
+than signal levels in terms of screen position, the only other info
+it contains is the baseline wrt each channel.
+
+In addition to the channel signal data, Buf file contains meta data like
+volts/div, times/div, channel baseline levels, ...
+
+Cmdline arguments
+===================
+
+The needed arguments
+
+  --file <path/dso_saved_buf_file>
+
+    the saved buf file that should be plotted
+
+Arguments that may be used if required
+
+  --format <buf|dat|auto>
+
+    load either the dat or the buf signal/waveform dump/save file
+
+  --channels <0|1|2|3|01|13|0123|...>
+
+    specify which channels should be displayed as part of the plot
+
+  --dtype <b|B>
+
+    whether to treat the sample data as signed or unsigned(default)
+
+  --ytickschannel <0|1|2|3>
+
+    specify the channel that will be used for deciding the y ticks.
+    Defaults to the 1st channel in the specified list of channels.
+
+  --filterdata <convolve|fft|"">
+
+    filter the signal data using the specified logic and plot the
+    same additionally to the original signal data.
+
+    convolve or convolve:[w1,w2,...wN]
+
+    fft or fft:ratioOfDataTowardsEndToClearToZero
+
+  --overlaytimedivs <time[:StringOfCharMarkers]>
+
+    Allows a overlay of timedivs, based on the time granularity
+    specified, starting from position where mouse-right button is
+    clicked.
+
+    If a StringOfCharMarkers is specified, place one char at a time
+    from this string into adjacent overlay time divs.
+
+    NOTE: This only works for buf files and not dat files, bcas dat
+    files dont have time or voltage info in them.
+
+    As the time/div supported by the oscilloscope need not directly
+    align with the freq characteristic / bitrate of the signal being
+    monitored, so one can use this option to overlay custom time/divs
+    that matches what one is interested in wrt the signals.
+
+
+Interactions
+=============
+
+Wrt Buf files
++++++++++++++++
+
+* clicking a location on the plot will give its voltage and time info
+
+* when two different locations have been clicked on the plot
+  * show the difference in voltage and time btw those points
+  * show the number of up/down waveform movements and a rough freq
+
+* Clicking anywhere using right mouse button, will show a overlay of
+  timedivs, with a time period specified using --overlaytimedivs.
+
+  It will also show a set of markers wrt each time div, if user has
+  specified the same as part of --overlaytimedivs.
+
+
+Examples
+==========
+
+A example trying to look at Midi data capture, with its 32uSec bit time, 3 byte msgs of 1Start+8Data+0Parity+1Stop bits
+
+./dso-plotter.py --file Data/UsbMidi/20220914S01/DATA001.BUF --overlaytimedivs 32e-6:S01234567sS01234567sS01234567s
+
