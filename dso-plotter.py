@@ -339,14 +339,17 @@ def show_info(ev):
     xvDelta = xval-g['prevXVal']
     yvDelta = yval-g['prevYVal']
     if (cntUpDown == 0):
-        singleCycleTime = np.NaN
+        singleCycleTimeF1 = np.NaN
+        singleCycleTimeF2 = np.NaN
     else:
-        singleCycleTime = xvDelta/(cntUpDown/2)
-    freq = 1/singleCycleTime
+        singleCycleTimeF1 = xvDelta/cntUpDown
+        singleCycleTimeF2 = xvDelta/(cntUpDown/2)
+    freq1 = 1/singleCycleTimeF1
+    freq2 = 1/singleCycleTimeF2
     g['prevXYText'].set_text(" Prev: {}, {}".format(g['prevXVal'], g['prevYVal']))
     g['curXYText'].set_text("  Cur: {}, {}".format(xval, yval))
     g['deltaXYText'].set_text("Delta: {}, {}".format(xvDelta, yvDelta))
-    g['freqText'].set_text(" Freq: UpDown[{}] Freq[{}]".format(cntUpDown, freq))
+    g['freqText'].set_text(" Freq: UpDown[{}] FreqUD1[{}] FreqUD2[{}]".format(cntUpDown, freq1, freq2))
     g['prevXVal'] = xval
     g['prevYVal'] = yval
     g['fig'].canvas.draw()
