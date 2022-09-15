@@ -335,10 +335,16 @@ def show_info(ev):
         i = 0
         gt['val'] = 0
         while tx < HORI_ALLWINDOWS_SPACE:
+            printMarker = False
             l = g['ax'].axvline(tx, color='r', alpha=0.1)
             gt['otdivlines'].append(l)
             if i < len(otdivMarkers):
                 marker = otdivMarkers[i]
+                if marker == '#':
+                    if otdivMarkers[i+1:].startswith("print#"):
+                        printMarker = True
+                        i += 7
+                        marker = otdivMarkers[i]
                 t = g['ax'].text(tx, ev.ydata, marker)
                 cVal = g['ycFD'][round(dx)]
                 if cVal > g['ycDMid']:
@@ -353,7 +359,7 @@ def show_info(ev):
                     ipos = int(marker)
                     ival = int(vtext)
                     gt['val'] |= (ival << ipos)
-                elif marker == 's':
+                elif (marker == 's') or (printMarker):
                     g['ax'].text(dx, dy-4, hex(gt['val']))
                     gt['val'] = 0
             tx += otdivPixels
