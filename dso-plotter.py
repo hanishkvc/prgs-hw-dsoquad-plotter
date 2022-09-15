@@ -352,32 +352,33 @@ def show_info(ev):
             gt['otdivlines'].append(l)
             if i < len(otdivMarkers):
                 marker = otdivMarkers[i]
-                if marker == '#':
-                    if otdivMarkers[i+1:].startswith("print#"):
-                        printMarker = True
-                        i += 7
-                        try:
-                            marker = otdivMarkers[i]
-                        except:
-                            marker = '#'
-                t = g['ax'].text(tx, ev.ydata, marker)
+                i += 1
                 cVal = g['ycFD'][round(dx)]
                 if cVal > g['ycDMid']:
                     vtext = "1"
                 else:
                     vtext = "0"
-                g['ax'].text(dx, dy, vtext, color="r")
-                i += 1
-                if (marker == 's') or (printMarker):
+                bPlotTD = False
+                timeAdjust = 1.0
+                if (marker == 's') or (marker == 'P'):
                     g['ax'].text(tx, dy-4, hex(gt['val']))
                     gt['val'] = 0
-                if marker == 'S':
+                    if marker == 's':
+                        bPlotTD = True
+                    else: # ie if P
+                        timeAdjust = 0.0
+                elif marker == 'S':
                     gt['val'] = 0
+                    bPlotTD = True
                 elif (marker >= '0') and (marker <= '9'):
                     ipos = int(marker)
                     ival = int(vtext)
                     gt['val'] |= (ival << ipos)
-            tx += otdivPixels
+                    bPlotTD = True
+                if bPlotTD:
+                    g['ax'].text(tx, ev.ydata, marker)
+                    g['ax'].text(dx, dy, vtext, color="r")
+            tx += (otdivPixels * timeAdjust)
             dx = tx + otdivSigValPixels
     # Calc Up/Down/Freq
     x0 = int(g['prevX'])
