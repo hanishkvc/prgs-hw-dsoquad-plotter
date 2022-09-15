@@ -353,15 +353,15 @@ def show_info(ev):
                     vtext = "0"
                 g['ax'].text(dx, dy, vtext, color="r")
                 i += 1
+                if (marker == 's') or (printMarker):
+                    g['ax'].text(dx, dy-4, hex(gt['val']))
+                    gt['val'] = 0
                 if marker == 'S':
                     gt['val'] = 0
                 elif (marker >= '0') and (marker <= '9'):
                     ipos = int(marker)
                     ival = int(vtext)
                     gt['val'] |= (ival << ipos)
-                elif (marker == 's') or (printMarker):
-                    g['ax'].text(dx, dy-4, hex(gt['val']))
-                    gt['val'] = 0
             tx += otdivPixels
             dx = tx + otdivSigValPixels
     # Calc Up/Down/Freq
