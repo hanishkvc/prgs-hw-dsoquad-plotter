@@ -377,11 +377,14 @@ def show_info(ev):
                 elif (marker >= '0') and (marker <= '9'):
                     ipos = int(marker)
                     ival = int(vtext)
+                    gt['val'] &= ((1 << ipos) ^ 0xFF)
+                    #gt['val'] &= (~np.uint8(1 << ipos))
                     gt['val'] |= (ival << ipos)
                     bPlotTD = True
                 if bPlotTD:
                     g['ax'].text(tx, ev.ydata, marker)
                     g['ax'].text(dx, dy, vtext, color="r")
+                #print(ipos, ival, bin(gt['val']))
             tx += (otdivPixels * timeAdjust)
     # Calc Up/Down/Freq
     x0 = int(g['prevX'])
