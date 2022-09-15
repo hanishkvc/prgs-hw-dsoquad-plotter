@@ -16,6 +16,7 @@ mo.open_port(pid)
 for i in range(4096):
     mo.send_message([0x90, 0x55, 0xaa])
     #time.sleep(0.001)
+    #mo.send_message([0x80, 0x55, 0x00])
     #mo.send_message([0x80, 0x55, 0x55])
     mo.send_message([0x80, 0x55, 0xaa])
     time.sleep(0.002)
