@@ -333,7 +333,7 @@ def show_info(ev):
         otdivTime, otdivMarkers = otdivStr.split(":")
     else:
         otdivTime = otdivStr
-        otdivMarkers = "01234567#print#01234567#print#"
+        otdivMarkers = "01234567P01234567P"
     if (otdivStr != "") and (ev.button == 3):
         for i in range(len(gt['otdivlines'])):
             l = gt['otdivlines'].pop()
@@ -348,11 +348,11 @@ def show_info(ev):
         while tx < HORI_ALLWINDOWS_SPACE:
             l = g['ax'].axvline(tx, color='r', alpha=0.1)
             gt['otdivlines'].append(l)
+            timeAdjust = 1.0
             if i < len(otdivMarkers):
                 marker = otdivMarkers[i]
                 i += 1
                 bPlotTD = False
-                timeAdjust = 1.0
                 if marker == 'H':
                     timeAdjust = 0.5
                 dx = tx + (otdivSigValPixels*timeAdjust)
