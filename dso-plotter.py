@@ -374,7 +374,7 @@ def show_info(ev):
                 elif marker == 'S':
                     gt['val'] = 0
                     bPlotTD = True
-                elif (marker >= '0') and (marker <= '9'):
+                elif (marker >= '0') and (marker <= '7'):
                     ipos = int(marker)
                     ival = int(vtext)
                     gt['val'] &= ((1 << ipos) ^ 0xFF)
