@@ -151,8 +151,10 @@ Usage:
 
         If looking at serial digital bus data, which contains only data bits
         and no start or stop bits, then use 0-7 as markers corresponding
-        to bit positions and #print# to trigger printing of accumulated
-        hex value on the plot.
+        to bit positions and P to trigger printing of accumulated hex value
+        on the plot.
+
+        Additionally one can use H to force a half time step.
 
         Printing will also reset the value accumulator variable.
 
@@ -175,7 +177,7 @@ Interactions:
 Examples:
     A example trying to look at Midi data capture, with its 32uSec bit time, 3 byte msgs of 1Start+8Data+0Parity+1Stop bits
     ./dso-plotter.py --file Data/UsbMidi/20220914S01/DATA001.BUF --overlaytimedivs 32e-6:S01234567sS01234567sS01234567s
-    ./dso-plotter.py --file Data/UsbMidi/20220914S03/DATA023.BUF --overlaytimedivs 1/31250:001234567#print#0001234567#print#0001234567#print#
+    ./dso-plotter.py --file Data/UsbMidi/20220914S03/DATA023.BUF --overlaytimedivs 1/31250:001234567P0001234567P0001234567P
 
     A example where some data bits are in Left-to-Right and others in Right-to-Left order
     ./dso-plotter.py --file Path/To/File.BUF --overlaytimedivs 1/9600:S01234567sS76543210sS01234567s
