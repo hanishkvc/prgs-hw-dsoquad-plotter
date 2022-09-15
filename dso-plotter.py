@@ -143,9 +143,20 @@ Usage:
       each overlaid time division, as it appears at their centers.
 
       Additionally 8bit hex value wrt guessed binary digital data can be
-      printed, if using S(tart),0-7(BitPositions),s(top) as the markers.
-      This is useful if looking at serial bus data following the template
-      of Start-BitPositions-End.
+      printed. For this
+
+        If looking at serial bus data which follow start-bitpositions-stop
+        template then use, S(tart),0-7(BitPositions),s(top) as the markers.
+        s marker will trigger printing of accumulated hex value on plot.
+
+        If looking at serial digital bus data, which contains only data bits
+        and no start or stop bits, then use 0-7 as markers corresponding
+        to bit positions and #print# to trigger printing of accumulated
+        hex value on the plot.
+
+        Printing will also reset the value accumulator variable.
+
+        NOTE: The Bit position markers need not be in order.
 
       NOTE: This only works for buf files and not dat files, bcas dat
       files dont have time or voltage info in them.
@@ -164,6 +175,7 @@ Interactions:
 Examples:
     A example trying to look at Midi data capture, with its 32uSec bit time, 3 byte msgs of 1Start+8Data+0Parity+1Stop bits
     ./dso-plotter.py --file Data/UsbMidi/20220914S01/DATA001.BUF --overlaytimedivs 32e-6:S01234567sS01234567sS01234567s
+    ./dso-plotter.py --file Data/UsbMidi/20220914S03/DATA023.BUF --overlaytimedivs 1/31250:001234567#print#0001234567#print#0001234567#print#
 
     A example where some data bits are in Left-to-Right and others in Right-to-Left order
     ./dso-plotter.py --file Path/To/File.BUF --overlaytimedivs 1/9600:S01234567sS76543210sS01234567s
@@ -321,7 +333,7 @@ def show_info(ev):
         otdivTime, otdivMarkers = otdivStr.split(":")
     else:
         otdivTime = otdivStr
-        otdivMarkers = "0123456789ABCDEF"
+        otdivMarkers = "01234567#print#01234567#print#"
     if (otdivStr != "") and (ev.button == 3):
         for i in range(len(gt['otdivlines'])):
             l = gt['otdivlines'].pop()

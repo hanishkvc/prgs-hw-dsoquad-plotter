@@ -50,10 +50,8 @@ interacting with the plot
   It also shows a guessed binary digital data interpretation, wrt data
   signal in each of these overlaid user specified time divisions.
 
-  Additionally 8bit hex value wrt guessed binary digital data can be
-  printed, if using S(tart),0-7(BitPositions),s(top) as the markers.
-  This is useful if looking at serial bus data following the template
-  of Start-BitPositions-End.
+  Additionally 8bit hex values wrt guessed binary digital data can be
+  printed.
 
 The above correspond to signal data belonging to ytickschannel.
 
@@ -111,9 +109,20 @@ Arguments that may be used if required
   each overlaid time division, as it appears at their centers.
 
   Additionally 8bit hex value wrt guessed binary digital data can be
-  printed, if using S(tart),0-7(BitPositions),s(top) as the markers.
-  This is useful if looking at serial bus data following the template
-  of Start-BitPositions-End.
+  printed. For this
+
+    If looking at serial bus data which follow start-bitpositions-stop
+    template then use, S(tart),0-7(BitPositions),s(top) as the markers.
+    s marker will trigger printing of accumulated hex value on plot.
+
+    If looking at serial digital bus data, which contains only data bits
+    and no start or stop bits, then use 0-7 as markers corresponding
+    to bit positions and #print# to trigger printing of accumulated
+    hex value on the plot.
+
+    Printing will also reset the value accumulator variable.
+
+    NOTE: The Bit position markers need not be in order.
 
   NOTE: This only works for buf files and not dat files, bcas dat
   files dont have time or voltage info in them.
@@ -142,12 +151,10 @@ Wrt Buf files
   It will also show a set of markers wrt each time div, if user has
   specified the same as part of --overlaytimedivs.
 
-  If markers S|s|0-7 are used, then S indicates Start marker,
-  s indicates end marker and 0-7 indicates bit position of
-  corresponding bit of data. Inturn the value infered/cumulated
-  at the time of seeing the end marker is printed on the plot
-  next to the s end marker. The Bit position indicators need not
-  be in order.
+  Additionally cummulated hex value from the guessed/infered individual
+  digital bit values can/may be printed on the plot, as mentioned in
+  the explanation wrt --overlaytimedivs argument.
+
 
 
 Examples
@@ -157,4 +164,5 @@ A example trying to look at Midi data capture, with its 32uSec bit time, 3 byte 
 
 ./dso-plotter.py --file path/to/file.buf --overlaytimedivs 32e-6:S01234567sS01234567sS01234567s
 ./dso-plotter.py --file path/to/file.buf --overlaytimedivs 1/31250:S01234567sS01234567sS01234567s
+./dso-plotter.py --file Data/UsbMidi/20220914S03/DATA023.BUF --overlaytimedivs 1/31250:001234567#print#0001234567#print#0001234567#print#
 
