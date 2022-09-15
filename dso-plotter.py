@@ -344,7 +344,10 @@ def show_info(ev):
                     if otdivMarkers[i+1:].startswith("print#"):
                         printMarker = True
                         i += 7
-                        marker = otdivMarkers[i]
+                        try:
+                            marker = otdivMarkers[i]
+                        except:
+                            marker = '#'
                 t = g['ax'].text(tx, ev.ydata, marker)
                 cVal = g['ycFD'][round(dx)]
                 if cVal > g['ycDMid']:
