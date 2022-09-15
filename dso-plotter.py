@@ -369,7 +369,7 @@ def show_info(ev):
                 g['ax'].text(dx, dy, vtext, color="r")
                 i += 1
                 if (marker == 's') or (printMarker):
-                    g['ax'].text(dx, dy-4, hex(gt['val']))
+                    g['ax'].text(tx, dy-4, hex(gt['val']))
                     gt['val'] = 0
                 if marker == 'S':
                     gt['val'] = 0
