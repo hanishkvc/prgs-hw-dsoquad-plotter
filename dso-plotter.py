@@ -113,20 +113,26 @@ argsHelp = """
 Usage:
     --file <path/dso_saved_buf_file>
       the saved buf file that should be plotted
+
     --format <buf|dat|auto>
       load either the dat or the buf signal/waveform dump/save file
+
     --channels <0|1|2|3|01|13|0123|...>
       specify which channels should be displayed as part of the plot
+
     --dtype <b|B>
       whether to treat the sample data as signed or unsigned(default)
+
     --ytickschannel <0|1|2|3>
       specify the channel that will be used for deciding the y ticks.
       Defaults to the 1st channel in the specified list of channels.
+
     --filterdata <convolve|fft|"">
       filter the signal data using the specified logic and plot the
       same additionally to the original signal data.
       convolve or convolve:[w1,w2,...wN]
       fft or fft:ratioOfDataTowardsEndToClearToZero
+
     --overlaytimedivs <time[:StringOfCharMarkers]>
       Allows a overlay of timedivs, based on the time granularity
       specified, starting from position where mouse-right button is
@@ -135,6 +141,12 @@ Usage:
       from this string into adjacent overlay time divs.
       Also show signal data interpreted as binary digital values, wrt
       each overlaid time division, as it appears at their centers.
+
+      Additionally 8bit hex value wrt guessed binary digital data can be
+      printed, if using S(tart),0-7(BitPositions),s(top) as the markers.
+      This is useful if looking at serial bus data following the template
+      of Start-BitPositions-End.
+
       NOTE: This only works for buf files and not dat files, bcas dat
       files dont have time or voltage info in them.
 
@@ -146,7 +158,8 @@ Interactions:
     * Clicking anywhere using right mouse button, will show a overlay of
       timedivs, with a time period specified using --overlaytimedivs. It
       will also show a set of markers wrt each time div, if user has
-      specified the same as part of --overlaytimedivs.
+      specified the same as part of --overlaytimedivs. And additionally
+      the binary bit values and 8bit hex values.
 
 Examples:
     ./dso-plotter.py --file Data/UsbMidi/20220914S01/DATA001.BUF --overlaytimedivs 32e-6:S01234567sS01234567sS01234567s
@@ -320,7 +333,8 @@ def show_info(ev):
             l = g['ax'].axvline(tx, color='r', alpha=0.1)
             gt['otdivlines'].append(l)
             if i < len(otdivMarkers):
-                t = g['ax'].text(tx, ev.ydata, otdivMarkers[i])
+                marker = otdivMarkers[i]
+                t = g['ax'].text(tx, ev.ydata, marker)
                 cVal = g['ycFD'][round(dx)]
                 if cVal > g['ycDMid']:
                     vtext = "1"
@@ -328,6 +342,14 @@ def show_info(ev):
                     vtext = "0"
                 g['ax'].text(dx, dy, vtext, color="r")
                 i += 1
+                if marker == 'S':
+                    gt['val'] = 0
+                if (marker >= '0') and (marker <= '9'):
+                    ipos = int(marker)
+                    ival = int(vtext)
+                    gt['val'] |= (ival << ipos)
+                if marker == 's':
+                    g['ax'].text(dx, dy-4, hex(gt['val']))
             tx += otdivPixels
             dx = tx + otdivSigValPixels
     # Calc Up/Down/Freq

@@ -50,6 +50,11 @@ interacting with the plot
   It also shows a guessed binary digital data interpretation, wrt data
   signal in each of these overlaid user specified time divisions.
 
+  Additionally 8bit hex value wrt guessed binary digital data can be
+  printed, if using S(tart),0-7(BitPositions),s(top) as the markers.
+  This is useful if looking at serial bus data following the template
+  of Start-BitPositions-End.
+
 The above correspond to signal data belonging to ytickschannel.
 
 
@@ -105,6 +110,11 @@ Arguments that may be used if required
   Also show signal data interpreted as binary digital values, wrt
   each overlaid time division, as it appears at their centers.
 
+  Additionally 8bit hex value wrt guessed binary digital data can be
+  printed, if using S(tart),0-7(BitPositions),s(top) as the markers.
+  This is useful if looking at serial bus data following the template
+  of Start-BitPositions-End.
+
   NOTE: This only works for buf files and not dat files, bcas dat
   files dont have time or voltage info in them.
 
@@ -131,6 +141,13 @@ Wrt Buf files
 
   It will also show a set of markers wrt each time div, if user has
   specified the same as part of --overlaytimedivs.
+
+  If markers S|s|0-7 are used, then S indicates Start marker,
+  s indicates end marker and 0-7 indicates bit position of
+  corresponding bit of data. Inturn the value infered/cumulated
+  at the time of seeing the end marker is printed on the plot
+  next to the s end marker. The Bit position indicators need not
+  be in order.
 
 
 Examples
