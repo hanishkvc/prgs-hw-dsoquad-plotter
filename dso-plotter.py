@@ -106,7 +106,6 @@ NUM_CHANNELS = 4
 BUFFILE_META_SIZE = 512
 
 g={}
-g['otdivlines'] = []
 
 
 
@@ -289,6 +288,8 @@ def adj_ydata(yin):
     return yin-56
 
 
+gt = {}
+gt['otdivlines'] = []
 def show_info(ev):
     xval = ev.xdata * g['tpixel']
     yval = g['yvB'] + (ev.ydata * g['yvPixel'])
@@ -305,8 +306,8 @@ def show_info(ev):
         otdivTime = otdivStr
         otdivMarkers = "0123456789ABCDEF"
     if (otdivStr != "") and (ev.button == 3):
-        for i in range(len(g['otdivlines'])):
-            l = g['otdivlines'].pop()
+        for i in range(len(gt['otdivlines'])):
+            l = gt['otdivlines'].pop()
             l.remove()
         otdiv = eval(otdivTime)
         otdivPixels = otdiv/g['tpixel']
@@ -317,7 +318,7 @@ def show_info(ev):
         i = 0
         while tx < HORI_ALLWINDOWS_SPACE:
             l = g['ax'].axvline(tx, color='r', alpha=0.1)
-            g['otdivlines'].append(l)
+            gt['otdivlines'].append(l)
             if i < len(otdivMarkers):
                 t = g['ax'].text(tx, ev.ydata, otdivMarkers[i])
                 cVal = g['ycFD'][round(dx)]
