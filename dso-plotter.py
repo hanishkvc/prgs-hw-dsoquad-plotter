@@ -162,8 +162,12 @@ Interactions:
       the binary bit values and 8bit hex values.
 
 Examples:
+    A example trying to look at Midi data capture, with its 32uSec bit time, 3 byte msgs of 1Start+8Data+0Parity+1Stop bits
     ./dso-plotter.py --file Data/UsbMidi/20220914S01/DATA001.BUF --overlaytimedivs 32e-6:S01234567sS01234567sS01234567s
-      * a example trying to look at Midi data capture, with its 32uSec bit time, 3 byte msgs of 1Start+8Data+0Parity+1Stop bits
+
+    A example where some data bits are in Left-to-Right and others in Right-to-Left order
+    ./dso-plotter.py --file Path/To/File.BUF --overlaytimedivs 1/9600:S01234567sS76543210sS01234567s
+
 
 """
 argsValid = [ "file", "format", "channels", "dtype", "ytickschannel", "filterdata", "overlaytimedivs" ]
@@ -329,6 +333,7 @@ def show_info(ev):
         dx = tx + otdivSigValPixels
         dy = ev.ydata - 4
         i = 0
+        gt['val'] = 0
         while tx < HORI_ALLWINDOWS_SPACE:
             l = g['ax'].axvline(tx, color='r', alpha=0.1)
             gt['otdivlines'].append(l)
@@ -344,12 +349,13 @@ def show_info(ev):
                 i += 1
                 if marker == 'S':
                     gt['val'] = 0
-                if (marker >= '0') and (marker <= '9'):
+                elif (marker >= '0') and (marker <= '9'):
                     ipos = int(marker)
                     ival = int(vtext)
                     gt['val'] |= (ival << ipos)
-                if marker == 's':
+                elif marker == 's':
                     g['ax'].text(dx, dy-4, hex(gt['val']))
+                    gt['val'] = 0
             tx += otdivPixels
             dx = tx + otdivSigValPixels
     # Calc Up/Down/Freq
