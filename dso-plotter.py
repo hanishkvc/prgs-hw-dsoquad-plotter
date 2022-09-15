@@ -355,6 +355,7 @@ def show_info(ev):
                 bPlotTD = False
                 if marker == 'H':
                     timeAdjust = 0.5
+                    bPlotTD = True
                 dx = tx + (otdivSigValPixels*timeAdjust)
                 cVal = g['ycFD'][round(dx)]
                 if cVal > g['ycDMid']:
