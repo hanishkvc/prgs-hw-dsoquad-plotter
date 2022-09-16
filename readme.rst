@@ -16,6 +16,9 @@ has a Dat file or Buf file.
 
 This is tested for DSOQuad / DS203 wrt the Wildcat firmware.
 
+Inturn as currently I am using its analog channels, that is what I have
+tested while developing this logic.
+
 Note that the sampled data is stored in these files similar to how it
 would appear on the device screen, so to get enough resolution in the
 captured data, ensure that the Volts/Div and Time/Div is fine enough

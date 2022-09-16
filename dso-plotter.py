@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # Plot data captured from DSOQuad Oscilloscope
-# Supports Buf and Dat files for now
+# For now
+# * Supports Buf and Dat files
+# * analog channels
 # HanishKVC, 2022
 #
 
