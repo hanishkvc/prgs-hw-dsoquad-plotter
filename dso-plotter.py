@@ -329,6 +329,8 @@ def adj_ydata(yin):
 
 gt = {}
 gt['otdivlines'] = []
+TIME_BEYONDMAX = 9999
+TIME_BEYONDMIN = -9999
 def show_info(ev):
     xval = ev.xdata * g['tpixel']
     yval = g['yvB'] + (ev.ydata * g['yvPixel'])
@@ -355,6 +357,8 @@ def show_info(ev):
         dy = ev.ydata - 4
         i = 0
         gt['val'] = 0
+        txMin = TIME_BEYONDMAX
+        txMax = TIME_BEYONDMIN
         while tx < HORI_ALLWINDOWS_SPACE:
             l = g['ax'].axvline(tx, color='r', alpha=0.1)
             gt['otdivlines'].append(l)
@@ -373,6 +377,10 @@ def show_info(ev):
                 else:
                     vtext = "0"
                 if (marker == 's') or (marker == 'P'):
+                    g['ax'].axhline(dy-8, txMin, txMax, color='b')
+                    print("DBUG:ShowInfo:8bitHex:", dy-8, txMin, txMax)
+                    txMin = TIME_BEYONDMAX
+                    txMax = TIME_BEYONDMIN
                     g['ax'].text(tx, dy-4, hex(gt['val']))
                     gt['val'] = 0
                     if marker == 's':
@@ -389,6 +397,10 @@ def show_info(ev):
                     #gt['val'] &= (~np.uint8(1 << ipos))
                     gt['val'] |= (ival << ipos)
                     bPlotTD = True
+                    if tx > txMax:
+                        txMax = tx
+                    if tx < txMin:
+                        txMin = tx
                 elif marker == 'p':
                     bPlotTD = True
                 if bPlotTD:
