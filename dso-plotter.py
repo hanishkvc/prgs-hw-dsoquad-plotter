@@ -377,12 +377,12 @@ def show_info(ev):
                 else:
                     vtext = "0"
                 if (marker == 's') or (marker == 'P'):
-                    g['ax'].axhline(dy-8, txMin, txMax, color='b')
-                    print("DBUG:ShowInfo:8bitHex:", dy-8, txMin, txMax)
+                    g['ax'].plot([txMin, txMax], [dy-5, dy-5], color='b', alpha=0.5)
+                    print("DBUG:ShowInfo:8bitHex:", dy-5, txMin, txMax)
+                    g['ax'].text((txMin+txMax)/2, dy-4, hex(gt['val']))
+                    gt['val'] = 0
                     txMin = TIME_BEYONDMAX
                     txMax = TIME_BEYONDMIN
-                    g['ax'].text(tx, dy-4, hex(gt['val']))
-                    gt['val'] = 0
                     if marker == 's':
                         bPlotTD = True
                     else: # ie if P
@@ -398,9 +398,9 @@ def show_info(ev):
                     gt['val'] |= (ival << ipos)
                     bPlotTD = True
                     if tx > txMax:
-                        txMax = tx
+                        txMax = dx
                     if tx < txMin:
-                        txMin = tx
+                        txMin = dx
                 elif marker == 'p':
                     bPlotTD = True
                 if bPlotTD:
