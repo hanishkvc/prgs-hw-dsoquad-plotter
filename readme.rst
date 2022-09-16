@@ -59,18 +59,23 @@ The above correspond to signal data belonging to ytickschannel.
 Decoding Digital bus
 =======================
 
-When looking at serial buses, you will have either synchronous or asynchronous
-signalling. In synchronous signalling, there will normally be a clock line along
-with data line like with i2c or spi or so, while asynchronous signalling will
-have only data line normally like uart/rs232/rs485/...
+When looking at data (serial/parallel) buses, you will have either synchronous or
+asynchronous signalling. In synchronous signalling, there will normally be a clock
+line along with data line like with i2c or spi or general purpose memory interface
+or so, while asynchronous signalling will have only data line normally like uart
+/ rs232 / rs485 / ...
 
 For now to keep things minimal, simple yet flexible to try and allow both kind of
 data to be decoded at a local level (ie byte or word level and not necessarily
-beyond), this logic allows the user to define a virtual clock of their own using
-the overlaytimedivs option. Inturn the logic allows one to specify markers to
-identify the data bits and their bit positions, and the same will be used decode
-/guess the binary bits and print their 8bit hex values, if so requested by the
-user.
+beyond), this logic, using its overlaytimedivs mechanism, allows the user to
+
+* define a virtual clock of their own, which can be overlaid on the plot, starting
+  from any position chosen by the user.
+
+* Inturn the logic also allows one to specify markers to identify the data bits
+  and their bit positions, as well as non data bits (control/sync/...) bits like
+  start, stop, any others (print bit) and the same will be used to decode / guess
+  the binary bits and print their 8bit hex values, if so requested by the user.
 
 If i2c/spi/etal bus being monitored uses hardware for generating the bus signals,
 then clock line will normally trigger at uniform interval wrt a single transaction
@@ -78,8 +83,8 @@ of byte(s), and the above simple yet flexible logic can be used to help decode t
 same. However if the clock and data lines are implemented using software emulation
 over gpio lines or so, then technically the bus standard does allow for variations
 in clocking period even within a single transaction, but the above mentioned simple
-logic based decoding currently implemented by this program wont be able to handle
-such variations, if it goes beyond a small fraction.
+logic (virtual time divs + markers) based decoding currently implemented by this
+program wont be able to handle such variations, if it goes beyond a small fraction.
 
 
 Usage
