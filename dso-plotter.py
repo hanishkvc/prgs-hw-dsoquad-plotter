@@ -3,6 +3,8 @@
 # For now
 # * Supports Buf and Dat files
 # * analog channels
+# * guided digital decode of analog signal using
+#   a virtual clock and markers/hints string
 # HanishKVC, 2022
 #
 
@@ -136,19 +138,25 @@ Usage:
       fft or fft:ratioOfDataTowardsEndToClearToZero
 
     --overlaytimedivs <time[:StringOfCharMarkers]>
-      Allows a overlay of timedivs, based on the time granularity
-      specified, starting from position where mouse-right button is
-      clicked.
-      If a StringOfCharMarkers is specified, place one char at a time
-      from this string into adjacent overlay time divs.
-      Also show signal data interpreted as binary digital values, wrt
-      each overlaid time division, as it appears at their centers.
+      Allows overlaying of a virtual clock signal | timedivs, based on the
+      time granularity specified, starting from position where mouse-right
+      button is clicked.
+      Additionally allow hint to be passed to the guided digital data
+      decode of analog signal logic, in the form of a StringOfCharMarkers.
+
+      This places one char at a time from this markers string into adjacent
+      overlay time divs.
+      Also shows channel signal data interpreted as binary digital values,
+      wrt each overlaid time division, as it appears at their centers,
+      guided based on the string of Markers/hints.
 
       Additionally 8bit hex value wrt guessed binary digital data can be
-      printed. For this
+      printed.
+
+      For this
 
         If looking at serial bus data which follow start-bitpositions-stop
-        template then use, S(tart),0-7(BitPositions),s(top) as the markers.
+        template then use S(tart), 0-7(BitPositions), s(top) as the markers.
         s marker will trigger printing of accumulated hex value on plot.
 
         If looking at serial digital bus data, which contains only data bits
@@ -168,6 +176,9 @@ Usage:
         the flexibility to interpret lsb first or msb first or if reqd
         even intermixed bit placement on the bus.
 
+        All hint markers consume full or part of a time step | division,
+        except for P.
+
       NOTE: This only works for buf files and not dat files, bcas dat
       files dont have time or voltage info in them.
 
@@ -177,10 +188,15 @@ Interactions:
       * show the difference in voltage and time btw those points
       * show the number of up/down waveform movements and a rough freq
     * Clicking anywhere using right mouse button, will show a overlay of
-      timedivs, with a time period specified using --overlaytimedivs. It
-      will also show a set of markers wrt each time div, if user has
+      timedivs, with a time period specified using --overlaytimedivs.
+      It will also show a set of markers wrt each time div, if user has
       specified the same as part of --overlaytimedivs. And additionally
-      the binary bit values and 8bit hex values.
+      the guessed/infered individual digital binary bit values and the
+      cummulated 8bit hex values (from the guessed individual bits, if
+      requested), as mentioned in the explanation wrt --overlaytimedivs
+      argument.
+
+
 
 Examples:
     A example trying to look at Midi data capture, with its 32uSec bit time, 3 byte msgs of 1Start+8Data+0Parity+1Stop bits

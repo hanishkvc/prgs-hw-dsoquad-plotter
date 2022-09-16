@@ -1,6 +1,6 @@
-#######################
-DSOQuad/DS203 Plotter
-#######################
+#################################################
+DSOQuad/DS203 Plotter and Guided Digital Decoder
+#################################################
 Author: HanishKVC
 Version: 20220916IST1551
 License: GPL-3.0-or-later
@@ -48,16 +48,23 @@ interacting with the plot
 
 * guess of freq wrt the data signal
 
-* overlaying of user specified time divisions from a position specified
-  by them. This also includes custom markers wrt each of these timedivs.
+* guided digital decoding of analog signals
 
-  It also shows a guessed binary digital data interpretation, wrt data
-  signal in each of these overlaid user specified time divisions.
+  Allow user to overlay a custom virtual clock of user specified time
+  period | division, over the captured signal data, from a position
+  specified by the user interactively. Along with passing of digital
+  data decoding hint in the form of custom markers string wrt each of
+  the adjacent time divs which are of interest to the user.
+
+  The same is used by the program to show guessed binary digital data
+  bit interpretation, wrt data signal in each of these overlaid user
+  specified time divisions | steps.
 
   Additionally 8bit hex values wrt guessed binary digital data can be
   printed.
 
-The above correspond to signal data belonging to ytickschannel.
+The above corresponds to signal data belonging to ytickschannel, if
+multiple channels are being looked at, at the same time.
 
 
 Decoding Digital bus
@@ -154,21 +161,27 @@ Arguments that may be used if required
 
 --overlaytimedivs <time[:StringOfCharMarkers]>
 
-  Allows a overlay of timedivs, based on the time granularity
-  specified, starting from position where mouse-right button is
-  clicked.
+  Allows overlaying of a virtual clock signal | timedivs, based on the
+  time granularity specified, starting from position where mouse-right
+  button is clicked.
 
-  If a StringOfCharMarkers is specified, place one char at a time
-  from this string into adjacent overlay time divs.
+  Additionally allow hint to be passed to the guided digital data
+  decode of analog signal logic, in the form of a StringOfCharMarkers.
 
-  Also show signal data interpreted as binary digital values, wrt
-  each overlaid time division, as it appears at their centers.
+  This places one char at a time from this string into adjacent overlay
+  time divs.
+
+  Also shows channel signal data interpreted as binary digital values,
+  wrt each overlaid time division, as it appears at their centers,
+  guided based on the string of Markers/hints.
 
   Additionally 8bit hex value wrt guessed binary digital data can be
-  printed. For this
+  printed.
+
+  For this
 
     If looking at serial bus data which follow start-bitpositions-stop
-    template then use, S(tart),0-7(BitPositions),s(top) as the markers.
+    template then use S(tart), 0-7(BitPositions), s(top) as the markers.
     s marker will trigger printing of accumulated hex value on plot.
 
     If looking at serial digital bus data, which contains only data bits
@@ -190,6 +203,8 @@ Arguments that may be used if required
     the flexibility to interpret lsb first or msb first or if reqd
     even intermixed bit placement on the bus.
 
+    All hint markers consume full or part of a time step | division,
+    except for P.
 
   NOTE: This only works for buf files and not dat files, bcas dat
   files dont have time or voltage info in them.
@@ -198,6 +213,7 @@ Arguments that may be used if required
   align with the freq characteristic / bitrate of the signal being
   monitored, so one can use this option to overlay custom time/divs
   that matches what one is interested in wrt the signals.
+
 
 
 Interactions
@@ -218,11 +234,11 @@ Wrt Buf files
   timedivs, with a time period specified using --overlaytimedivs.
 
   It will also show a set of markers wrt each time div, if user has
-  specified the same as part of --overlaytimedivs.
-
-  Additionally cummulated hex value from the guessed/infered individual
-  digital bit values can/may be printed on the plot, as mentioned in
-  the explanation wrt --overlaytimedivs argument.
+  specified the same as part of --overlaytimedivs. And additionally
+  the guessed/infered individual digital binary bit values and the
+  cummulated 8bit hex values (from the guessed individual bits, if
+  requested), as mentioned in the explanation wrt --overlaytimedivs
+  argument.
 
 
 
