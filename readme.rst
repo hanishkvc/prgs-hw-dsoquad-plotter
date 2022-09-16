@@ -76,10 +76,28 @@ beyond), this logic, using its overlaytimedivs mechanism, allows the user to
 * define a virtual clock of their own, which can be overlaid on the plot, starting
   from any position chosen by the user.
 
-* Inturn the logic also allows one to specify markers to identify the data bits
-  and their bit positions, as well as non data bits (control/sync/...) bits like
-  start, stop, any others (print bit) and the same will be used to decode / guess
-  the binary bits and print their 8bit hex values, if so requested by the user.
+  * ex: for 1 KHz specify 1e-3 or 1/1e3 or so
+
+  * ex: for 9600 buad rate, simply specify 1/9600
+
+* Inturn the logic also allows one to specify a markers string to help guide the
+  identification of the data bits and their bit positions, as well as non data bits
+  (control/sync/...) bits like start, stop, any others (print bit) and the same
+  will be used to decode / guess the binary bits and print their 8bit hex values,
+  if so requested by the user.
+
+  * ex: for midi specify S01234567sS01234567sS01234567s
+
+  * ex: for 16bits of serial data without any start-stop-etal and assuming lsb
+    first use 01234567P01234567P
+
+  * ex: for 16bits of serial data without any start-stop-etal and assuming msb
+    first use 76543210P76543210P
+
+* look at the example usage specified further down wrt --overlaytimedivs arg
+  for how to use it.
+
+  * ex: for midi use --overlaytimedivs 1/31250:S01234567sS01234567sS01234567s
 
 If i2c/spi/etal bus being monitored uses hardware for generating the bus signals,
 then clock line will normally trigger at uniform interval wrt a single transaction
@@ -99,15 +117,17 @@ Cmdline arguments
 
 The needed arguments
 
---file <path/dso_saved_buf_file>
+--file <path/dso_saved_buf_or_dat_file>
 
-  the saved buf file that should be plotted
+  the saved buf or dat file that should be plotted
 
 Arguments that may be used if required
 
 --format <buf|dat|auto>
 
   load either the dat or the buf signal/waveform dump/save file
+
+  default is auto and based on file extension the file format is selected.
 
 --channels <0|1|2|3|01|13|0123|...>
 
@@ -120,6 +140,7 @@ Arguments that may be used if required
 --ytickschannel <0|1|2|3>
 
   specify the channel that will be used for deciding the y ticks.
+
   Defaults to the 1st channel in the specified list of channels.
 
 --filterdata <convolve|fft|"">
@@ -188,7 +209,9 @@ Wrt Buf files
 * clicking a location on the plot will give its voltage and time info
 
 * when two different locations have been clicked on the plot
+
   * show the difference in voltage and time btw those points
+
   * show the number of up/down waveform movements and a rough freq
 
 * Clicking anywhere using right mouse button, will show a overlay of
@@ -209,6 +232,8 @@ Examples
 A example trying to look at Midi data capture, with its 32uSec bit time, 3 byte msgs of 1Start+8Data+0Parity+1Stop bits
 
 ./dso-plotter.py --file path/to/file.buf --overlaytimedivs 32e-6:S01234567sS01234567sS01234567s
+
 ./dso-plotter.py --file path/to/file.buf --overlaytimedivs 1/31250:S01234567sS01234567sS01234567s
+
 ./dso-plotter.py --file Data/UsbMidi/20220914S03/DATA023.BUF --overlaytimedivs 1/31250:p01234567Ppp01234567Ppp01234567Pp
 
