@@ -154,11 +154,17 @@ Usage:
         to bit positions and P to trigger printing of accumulated hex value
         on the plot.
 
-        Additionally one can use H to force a half time step.
+        Additionally one can use
+          H to force a half time step|div.
+          p to print the bit correponding to its time step|div
+          without adding the bit to the 8bit value accumulator.
 
-        Printing will also reset the value accumulator variable.
+        Printing using s or P, will also reset the 8bit value accumulator
+        variable.
 
-        NOTE: The Bit position markers need not be in order.
+        NOTE: The Bit position markers need not be in order. Thus giving
+        the flexibility to interpret lsb first or msb first or if reqd
+        even intermixed bit placement on the bus.
 
       NOTE: This only works for buf files and not dat files, bcas dat
       files dont have time or voltage info in them.
@@ -177,7 +183,7 @@ Interactions:
 Examples:
     A example trying to look at Midi data capture, with its 32uSec bit time, 3 byte msgs of 1Start+8Data+0Parity+1Stop bits
     ./dso-plotter.py --file Data/UsbMidi/20220914S01/DATA001.BUF --overlaytimedivs 32e-6:S01234567sS01234567sS01234567s
-    ./dso-plotter.py --file Data/UsbMidi/20220914S03/DATA023.BUF --overlaytimedivs 1/31250:001234567P0001234567P0001234567P
+    ./dso-plotter.py --file Data/UsbMidi/20220914S03/DATA023.BUF --overlaytimedivs 1/31250:p01234567Ppp01234567Ppp01234567Pp
 
     A example where some data bits are in Left-to-Right and others in Right-to-Left order
     ./dso-plotter.py --file Path/To/File.BUF --overlaytimedivs 1/9600:S01234567sS76543210sS01234567s
@@ -380,6 +386,8 @@ def show_info(ev):
                     gt['val'] &= ((1 << ipos) ^ 0xFF)
                     #gt['val'] &= (~np.uint8(1 << ipos))
                     gt['val'] |= (ival << ipos)
+                    bPlotTD = True
+                elif marker == 'p':
                     bPlotTD = True
                 if bPlotTD:
                     g['ax'].text(tx, ev.ydata, marker)
