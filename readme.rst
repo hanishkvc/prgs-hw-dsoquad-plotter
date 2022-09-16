@@ -2,7 +2,8 @@
 DSOQuad/DS203 Plotter
 #######################
 Author: HanishKVC
-Version: 20220914IST2253
+Version: 20220916IST1551
+License: GPL-3.0-or-later
 
 
 Overview
