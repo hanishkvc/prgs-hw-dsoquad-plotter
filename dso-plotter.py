@@ -209,7 +209,7 @@ Examples:
 
 
 """
-argsValid = [ "file", "format", "channels", "dtype", "ytickschannel", "filterdata", "overlaytimedivs" ]
+argsValid = [ "file", "format", "channels", "dtype", "ytickschannel", "filterdata", "overlaytimedivs", "samplingrate" ]
 def process_args(g, args):
     g['channels'] = "0123"
     g['dtype'] = "B"
@@ -319,6 +319,12 @@ def parse_tdiv_index(ind):
     return tdivList[ind][0], val
 
 
+srList = {
+    "100uS": 150e3,
+    "50uS": 600e3,
+}
+
+
 def parse_meta(g):
     meta = array.array('h') # Need to check if all entries that is needed here correspond to 16bit signed values only or are there some unsigned 16bit values.
     meta.frombytes(g['meta'])
@@ -338,6 +344,7 @@ def parse_meta(g):
     g['timebase'] = parse_tdiv_index(meta[17])
     g['tpixel'] = g['timebase'][1]/HORI_TDIV_DATASAMPLES
     print("INFO:ParseMeta: time/div:{}".format(g['timebase']))
+    g['sr'] = srList[g['timebase'][0]]
 
 
 def adj_ydata(yin):
@@ -508,6 +515,19 @@ def fixif_partialdata_window(din, cid):
     return din
 
 
+def show_fft(g):
+    try:
+        sr = eval(g['samplingrate'])
+    except:
+        sr = g['sr']
+    fd = np.fft.fft(g['ycFD'])
+    fdLen = int(len(fd)/2)
+    fd = fd[1:fdLen+1]
+    fd = np.abs(fd)
+    xd = np.arange(fdLen)*(sr/fdLen)
+    g['axFD'].plot(xd,fd)
+
+
 DATFILE_TOTALSIZE = 2048
 DATFILE_CHANNELSIZE = 512
 def plot_datfile(g):
@@ -567,9 +587,11 @@ def plot_buffile(g):
         cd[2,j] = adj_ydata(da[i+2])
         cd[3,j] = adj_ydata(da[i+3])
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(2,1)
     g['fig'] = fig
-    g['ax'] = ax
+    g['ax'] = ax[0]
+    g['axFD'] = ax[1]
+    ax = ax[0]
     fig.canvas.mpl_connect('button_press_event', show_info)
     for i in range(NUM_CHANNELS):
         if not ("{}".format(i) in g['channels']):
@@ -592,6 +614,8 @@ def plot_buffile(g):
     g['ycDThreshold'] = (g['ycDMid'] - g['ycDMin'])*0.7
     print("INFO:PlotBufFile:C{}: Data Raw[{} to {}] Adjusted[{} to {}] Mid[{}] Threshold[{}]".format(yc, np.min(rd), np.max(rd), g['ycDMin'], g['ycDMax'], g['ycDMid'], g['ycDThreshold']))
     print("INFO:PlotBufFile:C{}:\n\tHistoRaw:{}\n\tHistoAdj:{}".format(yc, np.histogram(rd), np.histogram(cd[yc])))
+
+    show_fft(g)
 
     ax.grid(True)
     #plt.locator_params('both', tight=True)
