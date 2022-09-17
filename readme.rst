@@ -2,7 +2,7 @@
 DSOQuad/DS203 Plotter and Guided Digital Decoder
 #################################################
 Author: HanishKVC
-Version: 20220916IST1551
+Version: 20220917IST1045
 License: GPL-3.0-or-later
 
 
@@ -48,7 +48,8 @@ interacting with the plot
 
 * guess of freq wrt the data signal
 
-* guided digital decoding of analog signals
+* guided digital decoding of bus signals (captured either over digital
+  or analog channel ie either as digital or analog signal)
 
   Allow user to overlay a custom virtual clock of user specified time
   period | division, over the captured signal data, from a position
@@ -63,12 +64,12 @@ interacting with the plot
   Additionally 8bit hex values wrt guessed binary digital data can be
   printed.
 
-The above corresponds to signal data belonging to ytickschannel, if
-multiple channels are being looked at, at the same time.
+The above corresponds to signal data belonging to ytickschannel, something
+to keep in mind if multiple channels are being looked at, at the same time.
 
 
-Decoding Digital bus
-=======================
+Guided Decoding of Digital bus
+================================
 
 When looking at data (serial/parallel) buses, you will have either synchronous or
 asynchronous signalling. In synchronous signalling, there will normally be a clock
@@ -78,10 +79,16 @@ or so, while asynchronous signalling will have only data line normally like uart
 
 For now to keep things minimal, simple yet flexible to try and allow both kind of
 data to be decoded at a local level (ie byte or word level and not necessarily
-beyond), this logic, using its overlaytimedivs mechanism, allows the user to
+beyond), this logic, using its overlaytimedivs mechanism, allows the user to guide
+the decoding of the digital bus data captured either over a digital channel or
+even the analog channel (as long as the voltage crosses a internally infered
+threshold it will be treated as logic 1, else logic 0).
+
+As part of this, one is required to
 
 * define a virtual clock of their own, which can be overlaid on the plot, starting
-  from any position chosen by the user.
+  from any position chosen by the user. This should be configured to match the
+  data related clocking setup of the bus being analysed.
 
   * ex: for 1 KHz specify 1e-3 or 1/1e3 or so
 
@@ -89,9 +96,11 @@ beyond), this logic, using its overlaytimedivs mechanism, allows the user to
 
 * Inturn the logic also allows one to specify a markers string to help guide the
   identification of the data bits and their bit positions, as well as non data bits
-  (control/sync/...) bits like start, stop, any others (print bit) and the same
-  will be used to decode / guess the binary bits and print their 8bit hex values,
-  if so requested by the user.
+  (control/sync/...) bits like start, stop, any others (just print those bit, if
+  needed). And the same will be used to decode / guess the significance of binary
+  bits wrt each of the time steps|divisions starting from the position selected by
+  the user and inturn print the same (ie individual binary bits) and additionally
+  the cummulated 8bit hex values, if so requested by the user.
 
   * ex: for midi specify S01234567sS01234567sS01234567s
 
@@ -102,18 +111,25 @@ beyond), this logic, using its overlaytimedivs mechanism, allows the user to
     first use 76543210P76543210P
 
 * look at the example usage specified further down wrt --overlaytimedivs arg
-  for how to use it.
+  for more examples.
 
   * ex: for midi use --overlaytimedivs 1/31250:S01234567sS01234567sS01234567s
 
 If i2c/spi/etal bus being monitored uses hardware for generating the bus signals,
-then clock line will normally trigger at uniform interval wrt a single transaction
-of byte(s), and the above simple yet flexible logic can be used to help decode the
-same. However if the clock and data lines are implemented using software emulation
-over gpio lines or so, then technically the bus standard does allow for variations
-in clocking period even within a single transaction, but the above mentioned simple
-logic (virtual time divs + markers) based decoding currently implemented by this
-program wont be able to handle such variations, if it goes beyond a small fraction.
+then the bus (clock and data lines) will operate with a uniform time period/interval
+wrt a single transaction of byte(s), and the above mentioned guided decoding of
+digital bus will be able to decode the bus data. However if the clock and data lines
+are implemented using software emulation over gpio lines or so, then technically the
+bus standard does allow for variations in clocking period even within a single
+transaction, and depending on how the software logic is implemented the clock period
+may or may not be uniform over the duration of a single transaction of byte(s). Then
+the above mentioned guided decoding logic (virtual clock time divs + hint markers)
+currently implemented by this program wont be able to handle such variations in timing,
+if it goes beyond a small fraction.
+
+Some Synchronous buses especially the parallel ones, may use wait state insertion
+to allow for stretching of the bus transaction cycle. So one may have to insert
+extra(one or more) p or 0 or 7 or so to account for same.
 
 
 Usage
@@ -166,14 +182,14 @@ Arguments that may be used if required
   button is clicked.
 
   Additionally allow hint to be passed to the guided digital data
-  decode of analog signal logic, in the form of a StringOfCharMarkers.
+  decode logic, in the form of a StringOfCharMarkers.
 
-  This places one char at a time from this string into adjacent overlay
-  time divs.
+  This places one char at a time from this markers string into adjacent
+  overlay time divs.
 
-  Also shows channel signal data interpreted as binary digital values,
-  wrt each overlaid time division, as it appears at their centers,
-  guided based on the string of Markers/hints.
+  Also shows channel (analog or digital doesnt matter) signal data
+  interpreted as binary digital values, wrt each overlaid time division,
+  as it appears at their centers, guided based on string of Markers/hints.
 
   Additionally 8bit hex value wrt guessed binary digital data can be
   printed.

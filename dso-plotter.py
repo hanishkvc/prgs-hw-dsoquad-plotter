@@ -2,9 +2,10 @@
 # Plot data captured from DSOQuad Oscilloscope
 # For now
 # * Supports Buf and Dat files
-# * analog channels
-# * guided digital decode of analog signal using
-#   a virtual clock and markers/hints string
+# * tested wrt the analog channels
+# * guided digital decode of bus data
+#   captured either has digital or analog signal
+#   using a virtual clock and markers/hints mechanism
 # HanishKVC, 2022
 #
 
@@ -142,13 +143,13 @@ Usage:
       time granularity specified, starting from position where mouse-right
       button is clicked.
       Additionally allow hint to be passed to the guided digital data
-      decode of analog signal logic, in the form of a StringOfCharMarkers.
+      decode logic, in the form of a StringOfCharMarkers.
 
       This places one char at a time from this markers string into adjacent
       overlay time divs.
-      Also shows channel signal data interpreted as binary digital values,
-      wrt each overlaid time division, as it appears at their centers,
-      guided based on the string of Markers/hints.
+      Also shows channel (analog or digital doesnt matter) signal data
+      interpreted as binary digital values, wrt each overlaid time division,
+      as it appears at their centers, guided based on string of Markers/hints.
 
       Additionally 8bit hex value wrt guessed binary digital data can be
       printed.
