@@ -67,8 +67,11 @@ interacting with the plot
 The above corresponds to signal data belonging to ytickschannel, something
 to keep in mind if multiple channels are being looked at, at the same time.
 
-FUTURE: The freq detection uses counting of up/down within the specified
-time duration. May also add a fft plot in future.
+NOTE: Data plot window gives a guessed freq of the signal between two clicked
+mouse positions by counting the number of up/down transitions wrt the signal
+within that window. However user can also request the program to show a fft
+plot of the captured data signal.
+
 
 Guided Decoding of Digital bus
 ================================
@@ -185,7 +188,8 @@ Arguments that may be used if required
 
   no: dont show fft plot [the default]
 
-  yes: infer the sampling rate from timebase and number of samples in it.
+  yes: show fft plot of the ytickschannel data. The logic infers the
+  sampling rate from timebase and number of samples in it.
 
   samplingrate: allow user to override sampling rate assumed, which is
   currently used by the fft related logic

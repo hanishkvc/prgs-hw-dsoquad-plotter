@@ -140,7 +140,8 @@ Usage:
 
     --showfft <no|yes|samplingrate>
       no: dont show fft plot [the default].
-      yes: infer the sampling rate from timebase and number of samples in it.
+      yes: show fft plot of the ytickschannel data. The logic infers the
+      sampling rate from timebase and number of samples in it.
       samplingrate: allow user to override sampling rate assumed, which is
       currently used by the fft related logic.
 
