@@ -329,7 +329,8 @@ def parse_tdiv_index(ind):
 
 srList = {
     "100uS": 150e3,
-    "50uS": 600e3,
+    "50uS": 300e3,
+    "10uS": 1.5e6,
 }
 
 
