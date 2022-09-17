@@ -67,6 +67,8 @@ interacting with the plot
 The above corresponds to signal data belonging to ytickschannel, something
 to keep in mind if multiple channels are being looked at, at the same time.
 
+FUTURE: The freq detection uses counting of up/down within the specified
+time duration. May also add a fft plot in future.
 
 Guided Decoding of Digital bus
 ================================
@@ -130,6 +132,10 @@ if it goes beyond a small fraction.
 Some Synchronous buses especially the parallel ones, may use wait state insertion
 to allow for stretching of the bus transaction cycle. So one may have to insert
 extra(one or more) p or 0 or 7 or so to account for same.
+
+FUTURE: May add support for a check string in addition to markers string. This can
+allow automatic cross check of start/stop/... bits and the value expected wrt them.
+It could use chars like 0,1,?|* or so
 
 
 Usage
