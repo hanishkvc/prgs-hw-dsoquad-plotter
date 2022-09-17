@@ -139,11 +139,10 @@ Usage:
       fft or fft:ratioOfDataTowardsEndToClearToZero
 
     --showfft <no|yes|samplingrate>
-      no: dont show fft plot [the default]
-      yes: picks a hardcoded sampling rate, this is supported for only
-        few timebases and may be wrong wrt the actual sampling rate used
-        with different firmware versions.
-      samplingrate: the sampling rate to assume wrt fft related logic
+      no: dont show fft plot [the default].
+      yes: infer the sampling rate from timebase and number of samples in it.
+      samplingrate: allow user to override sampling rate assumed, which is
+      currently used by the fft related logic.
 
     --overlaytimedivs <time[:StringOfCharMarkers]>
       Allows overlaying of a virtual clock signal | timedivs, based on the
@@ -327,13 +326,6 @@ def parse_tdiv_index(ind):
     return tdivList[ind][0], val
 
 
-srList = {
-    "100uS": 150e3,
-    "50uS": 300e3,
-    "10uS": 1.5e6,
-}
-
-
 def parse_meta(g):
     meta = array.array('h') # Need to check if all entries that is needed here correspond to 16bit signed values only or are there some unsigned 16bit values.
     meta.frombytes(g['meta'])
@@ -353,7 +345,8 @@ def parse_meta(g):
     g['timebase'] = parse_tdiv_index(meta[17])
     g['tpixel'] = g['timebase'][1]/HORI_TDIV_DATASAMPLES
     print("INFO:ParseMeta: time/div:{}".format(g['timebase']))
-    g['sr'] = srList[g['timebase'][0]]
+    g['sr'] = 1/g['tpixel']
+    print("INFO:ParseMeta:SamplingRate:", g['sr'])
 
 
 def adj_ydata(yin):
@@ -531,9 +524,10 @@ def show_fft(g):
         sr = g['sr']
     fd = np.fft.fft(g['ycFD'])
     fdLen = int(len(fd)/2)
-    fd = fd[1:fdLen+1]
+    fd = fd[0:fdLen]
+    fd[0] = 0 # clear the dc value
     fd = np.abs(fd)
-    xd = np.arange(fdLen)*(sr/fdLen)
+    xd = np.arange(fdLen)*(sr*0.5/fdLen)
     g['axFD'].plot(xd,fd)
 
 

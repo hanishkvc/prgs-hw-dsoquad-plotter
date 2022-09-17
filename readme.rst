@@ -185,11 +185,10 @@ Arguments that may be used if required
 
   no: dont show fft plot [the default]
 
-  yes: picks a hardcoded sampling rate, this is supported for only
-  few timebases and may be wrong wrt the actual sampling rate used
-  with different firmware versions.
+  yes: infer the sampling rate from timebase and number of samples in it.
 
-  samplingrate: the sampling rate to assume wrt fft related logic
+  samplingrate: allow user to override sampling rate assumed, which is
+  currently used by the fft related logic
 
 --overlaytimedivs <time[:StringOfCharMarkers]>
 
