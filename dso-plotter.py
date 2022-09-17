@@ -358,6 +358,10 @@ gt['otdivlines'] = []
 TIME_BEYONDMAX = 9999
 TIME_BEYONDMIN = -9999
 def show_info(ev):
+    evaxY0 = ev.inaxes.get_subplotspec().get_position(g['fig']).y0
+    axY0 = g['ax'].get_subplotspec().get_position(g['fig']).y0
+    if (evaxY0 != axY0):
+        return
     xval = ev.xdata * g['tpixel']
     yval = g['yvB'] + (ev.ydata * g['yvPixel'])
     print(ev, xval, yval)
@@ -518,6 +522,7 @@ def fixif_partialdata_window(din, cid):
 
 
 def show_fft(g):
+    #print("AxFD", g['axFD'], dir(g['axFD']))
     try:
         sr = eval(g['showfft'])
     except:
