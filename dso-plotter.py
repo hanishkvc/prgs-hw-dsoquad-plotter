@@ -138,6 +138,13 @@ Usage:
       convolve or convolve:[w1,w2,...wN]
       fft or fft:ratioOfDataTowardsEndToClearToZero
 
+    --showfft <no|yes|samplingrate>
+      no: dont show fft plot [the default]
+      yes: picks a hardcoded sampling rate, this is supported for only
+        few timebases and may be wrong wrt the actual sampling rate used
+        with different firmware versions.
+      samplingrate: the sampling rate to assume wrt fft related logic
+
     --overlaytimedivs <time[:StringOfCharMarkers]>
       Allows overlaying of a virtual clock signal | timedivs, based on the
       time granularity specified, starting from position where mouse-right
@@ -209,13 +216,14 @@ Examples:
 
 
 """
-argsValid = [ "file", "format", "channels", "dtype", "ytickschannel", "filterdata", "overlaytimedivs", "samplingrate" ]
+argsValid = [ "file", "format", "channels", "dtype", "ytickschannel", "filterdata", "overlaytimedivs", "showfft" ]
 def process_args(g, args):
     g['channels'] = "0123"
     g['dtype'] = "B"
     g['ytickschannel'] = "?"
     g['filterdata'] = ""
     g['format'] = "auto"
+    g['showfft'] = "no"
     if len(args) < 2:
         args.append("--help")
     iArg = 0
@@ -517,7 +525,7 @@ def fixif_partialdata_window(din, cid):
 
 def show_fft(g):
     try:
-        sr = eval(g['samplingrate'])
+        sr = eval(g['showfft'])
     except:
         sr = g['sr']
     fd = np.fft.fft(g['ycFD'])
@@ -587,11 +595,15 @@ def plot_buffile(g):
         cd[2,j] = adj_ydata(da[i+2])
         cd[3,j] = adj_ydata(da[i+3])
 
-    fig, ax = plt.subplots(2,1)
+    if g['showfft'] != "no" :
+        fig, ax = plt.subplots(2,1)
+        g['axFD'] = ax[1]
+        ax = ax[0]
+    else:
+        fig, ax = plt.subplots()
     g['fig'] = fig
-    g['ax'] = ax[0]
-    g['axFD'] = ax[1]
-    ax = ax[0]
+    g['ax'] = ax
+
     fig.canvas.mpl_connect('button_press_event', show_info)
     for i in range(NUM_CHANNELS):
         if not ("{}".format(i) in g['channels']):
@@ -615,7 +627,8 @@ def plot_buffile(g):
     print("INFO:PlotBufFile:C{}: Data Raw[{} to {}] Adjusted[{} to {}] Mid[{}] Threshold[{}]".format(yc, np.min(rd), np.max(rd), g['ycDMin'], g['ycDMax'], g['ycDMid'], g['ycDThreshold']))
     print("INFO:PlotBufFile:C{}:\n\tHistoRaw:{}\n\tHistoAdj:{}".format(yc, np.histogram(rd), np.histogram(cd[yc])))
 
-    show_fft(g)
+    if g['showfft'] != "no" :
+        show_fft(g)
 
     ax.grid(True)
     #plt.locator_params('both', tight=True)

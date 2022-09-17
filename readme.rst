@@ -181,6 +181,16 @@ Arguments that may be used if required
 
   fft or fft:ratioOfDataTowardsEndToClearToZero
 
+--showfft <no|yes|samplingrate>
+
+  no: dont show fft plot [the default]
+
+  yes: picks a hardcoded sampling rate, this is supported for only
+  few timebases and may be wrong wrt the actual sampling rate used
+  with different firmware versions.
+
+  samplingrate: the sampling rate to assume wrt fft related logic
+
 --overlaytimedivs <time[:StringOfCharMarkers]>
 
   Allows overlaying of a virtual clock signal | timedivs, based on the
