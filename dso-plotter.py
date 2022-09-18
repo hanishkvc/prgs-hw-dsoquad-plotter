@@ -373,10 +373,17 @@ def show_info(ev):
     # overlay tdiv
     otdivStr = g.get('overlaytimedivs', "")
     if ":" in otdivStr:
-        otdivTime, otdivMarkers = otdivStr.split(":")
+        otdivStrArray = otdivStr.split(":")
+        otdivTime = otdivStrArray[0]
+        otdivMarkers = otdivStrArray[1]
+        if len(otdivStrArray) == 3:
+            otdivCheck = otdivStrArray[2]
+        else:
+            otdivCheck = ""
     else:
         otdivTime = otdivStr
         otdivMarkers = "01234567P01234567P"
+        otdivCheck = ""
     if (otdivStr != "") and (ev.button == 3):
         for i in range(len(gt['otdivlines'])):
             l = gt['otdivlines'].pop()
@@ -396,6 +403,10 @@ def show_info(ev):
             timeAdjust = 1.0
             if i < len(otdivMarkers):
                 marker = otdivMarkers[i]
+                if otdivCheck != "":
+                    check = otdivCheck[i]
+                else:
+                    check = ""
                 i += 1
                 bPlotTD = False
                 if marker == 'H':
@@ -407,6 +418,10 @@ def show_info(ev):
                     vtext = "1"
                 else:
                     vtext = "0"
+                valueColor = 'r'
+                if check != "":
+                    if (vtext == check) or (check == "?") or (check == "*"):
+                        valueColor = 'b'
                 if (marker == 's') or (marker == 'P'):
                     g['ax'].plot([txMin, txMax], [dy-5, dy-5], color='b', alpha=0.5)
                     print("DBUG:ShowInfo:8bitHex:", dy-5, txMin, txMax)
@@ -436,7 +451,7 @@ def show_info(ev):
                     bPlotTD = True
                 if bPlotTD:
                     g['ax'].text(tx, ev.ydata, marker)
-                    g['ax'].text(dx, dy, vtext, color="r")
+                    g['ax'].text(dx, dy, vtext, color=valueColor)
                 #print(ipos, ival, bin(gt['val']))
             tx += (otdivPixels * timeAdjust)
     # Calc Up/Down/Freq
