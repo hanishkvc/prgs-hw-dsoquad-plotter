@@ -187,6 +187,18 @@ Usage:
         All guide markers consume full or part of a time step | division,
         except for P.
 
+      If guideMarkersString is specified, then one can optionally also specify
+      a checkString. This can contain chars 0|1|?|*. If 0 or 1 is specified,
+      then the decoded/guessed bit should ideally match this specified value.
+      However if ? or * is specified, then decoded value can be either 0 or 1.
+      If the decoded bit matchs what was expected, as specified through the
+      checkString, then the bit is printed in blue color, else it will be
+      printed in red color.
+
+        NOTE: Even thou P in guideMarkersString doesnt consume any time step,
+        one needs to put some dummy value in the checkString, corresponding to
+        P in the guideMarkersString.
+
       NOTE: This only works for buf files and not dat files, bcas dat
       files dont have time or voltage info in them.
 
@@ -213,6 +225,9 @@ Examples:
 
     A example where some data bits are in Left-to-Right and others in Right-to-Left order
     ./dso-plotter.py --file Path/To/File.BUF --overlaytimedivs 1/9600:S01234567sS76543210sS01234567s
+
+    An example of trying to look at midi data capture, which uses fft plot as well as checkString mechanisms
+    ./dso-plotter.py --file Path/To/MidiCapture.BUF --overlaytimedivs 1/31250:S01234567sS01234567sS01234567s:0????????10????????10????????1 --channels 0 --showfft yes
 
 
 """

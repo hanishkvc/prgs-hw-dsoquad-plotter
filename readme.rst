@@ -54,7 +54,7 @@ interacting with the plot
   Allow user to overlay a custom virtual clock of user specified time
   period | division, over the captured signal data, from a position
   specified by the user interactively. Along with passing of digital
-  data decoding hint in the form of custom markers string wrt each of
+  data decoding hint in the form of guideMarkersString wrt each of
   the adjacent time divs which are of interest to the user.
 
   The same is used by the program to show guessed binary digital data
@@ -63,6 +63,10 @@ interacting with the plot
 
   Additionally 8bit hex values wrt guessed binary digital data can be
   printed.
+
+  User can also pass a checkString, which is used to cross check the
+  guessed/decoded digital bits with user specified bit values in the
+  checkString.
 
 The above corresponds to signal data belonging to ytickschannel, something
 to keep in mind if multiple channels are being looked at, at the same time.
@@ -99,7 +103,7 @@ As part of this, one is required to
 
   * ex: for 9600 buad rate, simply specify 1/9600
 
-* Inturn the logic also allows one to specify a markers string to help guide the
+* Inturn the logic also allows one to specify a guideMarkersString to help guide the
   identification of the data bits and their bit positions, as well as non data bits
   (control/sync/...) bits like start, stop, any others (just print those bit, if
   needed). And the same will be used to decode / guess the significance of binary
@@ -136,9 +140,8 @@ Some Synchronous buses especially the parallel ones, may use wait state insertio
 to allow for stretching of the bus transaction cycle. So one may have to insert
 extra(one or more) p or 0 or 7 or so to account for same.
 
-FUTURE: May add support for a check string in addition to markers string. This can
-allow automatic cross check of start/stop/... bits and the value expected wrt them.
-It could use chars like 0,1,?|* or so
+One can also specify a checkString in addition to guideMarkersString. This allows
+automatic cross check of start/stop/... bits and the value expected wrt them.
 
 
 Usage
@@ -238,6 +241,18 @@ Arguments that may be used if required
     All guide markers consume full or part of a time step | division,
     except for P.
 
+  If guideMarkersString is specified, then one can optionally also specify
+  a checkString. This can contain chars 0|1|?|*. If 0 or 1 is specified,
+  then the decoded/guessed bit should ideally match this specified value.
+  However if ? or * is specified, then decoded value can be either 0 or 1.
+  If the decoded bit matchs what was expected, as specified through the
+  checkString, then the bit is printed in blue color, else it will be
+  printed in red color.
+
+    NOTE: Even thou P in guideMarkersString doesnt consume any time step,
+    one needs to put some dummy value in the checkString, corresponding to
+    P in the guideMarkersString.
+
   NOTE: This only works for buf files and not dat files, bcas dat
   files dont have time or voltage info in them.
 
@@ -284,4 +299,19 @@ A example trying to look at Midi data capture, with its 32uSec bit time, 3 byte 
 ./dso-plotter.py --file path/to/file.buf --overlaytimedivs 1/31250:S01234567sS01234567sS01234567s
 
 ./dso-plotter.py --file Data/UsbMidi/20220914S03/DATA023.BUF --overlaytimedivs 1/31250:p01234567Ppp01234567Ppp01234567Pp
+
+
+An example trying to look at midi data capture, which uses the checkString mechanism, and also shows fft plot of the signal
+NOTE: Start is supposed to be 0 and stop is supposed to be 1
+
+./dso-plotter.py --file Data/UsbMidi/20220914S03/DATA023.BUF --overlaytimedivs 1/31250:S01234567sS01234567sS01234567s:0????????10????????10????????1 --channels 0 --showfft yes
+
+* the above uses Start, Stop guide markers
+
+./dso-plotter.py --file Data/UsbMidi/20220914S03/DATA023.BUF --overlaytimedivs 1/31250:p01234567Ppp01234567Ppp01234567Pp:0?????????10?????????10?????????1 --channels 0
+
+* the above uses p(rintBit) and P(rint8bitHexValue) guide markers
+
+* note that even thou P doesnt consume any time step, one still needs to provide a dummy char in checkString in the corresponding place.
+  So there are 9 ? in the pP version compared to 8 ? in the sS version of the guideMarkersString
 
