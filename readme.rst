@@ -194,26 +194,23 @@ Arguments that may be used if required
   samplingrate: allow user to override sampling rate assumed, which is
   currently used by the fft related logic
 
---overlaytimedivs <time[:StringOfCharMarkers]>
+--overlaytimedivs <unitTime[:guideMarkersString[:checkString]]>
 
   Allows overlaying of a virtual clock signal | timedivs, based on the
-  time granularity specified, starting from position where mouse-right
+  unit time granularity specified, starting from position where mouse-right
   button is clicked.
 
-  Additionally allow hint to be passed to the guided digital data
-  decode logic, in the form of a StringOfCharMarkers.
+  Optionally allow hint to be passed to the guided digital data decode logic,
+  in the form of a guideMarkersString.
 
-  This places one char at a time from this markers string into adjacent
-  overlay time divs.
-
-  Also shows channel (analog or digital doesnt matter) signal data
-  interpreted as binary digital values, wrt each overlaid time division,
-  as it appears at their centers, guided based on string of Markers/hints.
-
+  This places one char at a time from this guide markers string into adjacent
+  overlay time divs. It also shows channel (analog or digital doesnt matter)
+  signal data interpreted as binary digital values, wrt each overlaid time
+  division, as it appears at their centers, guided based on guideMarkers.
   Additionally 8bit hex value wrt guessed binary digital data can be
   printed.
 
-  For this
+  The guideMarkersString consists of
 
     If looking at serial bus data which follow start-bitpositions-stop
     template then use S(tart), 0-7(BitPositions), s(top) as the markers.
@@ -238,7 +235,7 @@ Arguments that may be used if required
     the flexibility to interpret lsb first or msb first or if reqd
     even intermixed bit placement on the bus.
 
-    All hint markers consume full or part of a time step | division,
+    All guide markers consume full or part of a time step | division,
     except for P.
 
   NOTE: This only works for buf files and not dat files, bcas dat
